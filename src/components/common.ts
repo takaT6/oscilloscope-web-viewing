@@ -5,7 +5,7 @@ export const Const = {
   GRAPH_ID: "graph"
 }
 
-export interface PlotlyData {
+export interface PlotData {
   x: Array<number>,
   y: Array<number>
 }

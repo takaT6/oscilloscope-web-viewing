@@ -37,7 +37,7 @@ onMounted(()=> {
         line.setY(i, ySin * amp + yNoise * noise);
       }
     }
-    cnt++;
+    // cnt++;
   }
   var intervalId = 0
   const intervalUpdate = () => {
@@ -46,7 +46,6 @@ onMounted(()=> {
       update()
     },5)
   }
-  
   intervalUpdate();
 
   const newFrame = (): void => {

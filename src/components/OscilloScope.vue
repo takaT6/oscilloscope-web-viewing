@@ -22,17 +22,13 @@
 
 <script setup lang="ts">
 import LineChart from './LineChart.vue'
-// import LineChart2 from './LineChart2.vue'
+import LineChart2 from './LineChart2.vue'
 import SlidersView from './SlidersView.vue'
 import { defineAsyncComponent} from "vue"
 
 // Lazy loading
 const WSController = defineAsyncComponent(
   () => import("./WSController.vue")
-);
-
-const LineChart2 = defineAsyncComponent(
-  () => import('./LineChart2.vue')
 );
 
 </script>
