@@ -54,16 +54,16 @@ export class userClass {
         const jsonData = JSON.parse(String(event.data));
         // ホストになったことを受信
         if(typeof jsonData.isHost !== 'undefined'){
-            this._status.value = jsonData.isHost ? 2 : 1; // 2:ホストor 1:接続済
-            this.makeStopper();
-            alert("あなたはホストになりました。")
-            return;
+          this._status.value = jsonData.isHost ? 2 : 1; // 2:ホストor 1:接続済
+          this.makeStopper();
+          alert("あなたはホストになりました。")
+          return;
         }
         // ゲストになったことを受信
         if(typeof jsonData.isGuest !== 'undefined'){
-            this._status.value = jsonData.isGuest ? 3 : 1; // 3:ゲストor 1:接続済
-            alert("あなたはゲストになりました。");
-            return;
+          this._status.value = jsonData.isGuest ? 3 : 1; // 3:ゲストor 1:接続済
+          alert("あなたはゲストになりました。");
+          return;
         }
         // ホストがいるかどうかを受信
         if(typeof jsonData.hostExists !== 'undefined'){
