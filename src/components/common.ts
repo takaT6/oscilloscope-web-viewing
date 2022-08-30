@@ -111,83 +111,83 @@ export class userClass {
   // 計測実行
   public run = () => {
     if( this._status.value == 2){
-        this._runConnection!.send('run');
+      this._runConnection!.send('run');
     }else{
-        console.log("コネクションが確立していません。");
-        console.log(this._status.value);
+      console.log("コネクションが確立していません。");
+      console.log(this._status.value);
     }
   }
 
   // プロセスの停止
   public stop = (): void => {
     if(this._status.value == 2){
-        if(this._stopperStatus == 1){
-            this._stopperConnection!.send('stop');
-        }else if(this._stopperStatus == 0){
-            this.makeStopper();
-            this._stopperConnection!.send('stop');
-        }
+      if(this._stopperStatus == 1){
+        this._stopperConnection!.send('stop');
+      }else if(this._stopperStatus == 0){
+        this.makeStopper();
+        this._stopperConnection!.send('stop');
+      }
     }
   }
 
 
   // サーバーの状態を確認する
   public checkServer = () => {
-      if( this._status.value > 0){
-        console.log("サーバーの状態をテェック中");
-          this._runConnection!.send('checkServer');
-      }else{
-          console.log("コネクションが確立していません。");
-          console.log(this._status.value);
-      }
+    if( this._status.value > 0){
+      console.log("サーバーの状態をテェック中");
+      this._runConnection!.send('checkServer');
+    }else{
+      console.log("コネクションが確立していません。");
+      console.log(this._status.value);
+    }
   }
 
   // ホストをとる
   public beHost = (): void => {
-      if( (this._status.value == 1 || this._status.value == 3) && !this._hostExists.value){// 1:接続済, 3:ゲスト 
-          this._runConnection!.send('beHost');
-      }else{
-          console.log("コネクションが確立していません。");
-          console.log(this._status.value);
-      }
+    if( (this._status.value == 1 || this._status.value == 3) && !this._hostExists.value){// 1:接続済, 3:ゲスト 
+      this._runConnection!.send('beHost');
+    }else{
+      console.log("コネクションが確立していません。");
+      console.log(this._status.value);
+    }
   }
 
   // ゲストになる
   public beGuest = (): void => {
-      if(this._status.value == 1){// 1:接続済
-          this._runConnection!.send('beGuest');
-      }else if(this._status.value == 2){// 2:ホスト
-          this._runConnection!.send('resignHost');
-          // this._runConnection!.send('beGuest');
-          // setTimeout(() => this._runConnection!.send('beGuest'),1000);
-          
-      }else{
-          console.log("コネクションが確立していません。");
-          console.log(this._status.value);
-      }
+    if(this._status.value == 1){// 1:接続済
+      this._runConnection!.send('beGuest');
+    }else if(this._status.value == 2){// 2:ホスト
+      this._runConnection!.send('resignHost');
+      // this._runConnection!.send('beGuest');
+      // setTimeout(() => this._runConnection!.send('beGuest'),1000);
+        
+    }else{
+      console.log("コネクションが確立していません。");
+      console.log(this._status.value);
+    }
   }
 
   //ストッパーの作成
   private makeStopper = (): boolean => {
-      if ('WebSocket' in window) {
-          this._stopperConnection = new WebSocket(Const.WS_ADDRESS);
-          this._stopperConnection!.onopen = () => {
-              this._stopperStatus = 1;
-          };
-          this._stopperConnection!.onerror = () => {
-              //do nothing
-          };
-          this._stopperConnection!.onmessage = (event: any) => {
-              //do nothing
-          };
-          this._stopperConnection!.onclose = () => {
-              this._stopperStatus = 0;
-          };
-          return true;
-      } else {
-          console.log('WebSocket NOT supported in this browser');
-          return false;
-      }
+    if ('WebSocket' in window) {
+      this._stopperConnection = new WebSocket(Const.WS_ADDRESS);
+      this._stopperConnection!.onopen = () => {
+        this._stopperStatus = 1;
+      };
+      this._stopperConnection!.onerror = () => {
+        //do nothing
+      };
+      this._stopperConnection!.onmessage = (event: any) => {
+        //do nothing
+      };
+      this._stopperConnection!.onclose = () => {
+        this._stopperStatus = 0;
+      };
+      return true;
+    } else {
+      console.log('WebSocket NOT supported in this browser');
+      return false;
+    }
   }
 
   private stopperDisconnect = () => {
