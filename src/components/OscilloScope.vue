@@ -4,9 +4,8 @@
   </div>
   <div class="chart">
     oscilloscope
-    <canvas id="myChart"></canvas>
+    <BarChart />
   </div>
-  <BarChart />
 </template>
 
 <script setup lang="ts">
@@ -17,4 +16,9 @@ import WSController from './WSController.vue';
 </script>
 
 <style scoped lang="scss">
+
+.chart {
+  // height: auto;
+  width: 50vw;
+}
 </style>

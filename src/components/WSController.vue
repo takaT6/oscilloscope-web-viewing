@@ -21,14 +21,14 @@
       :disabled="user.hostExists || user.status == 0 || user.isProcess"
       @click="user.beHost"
     >
-      ホストになる
+      Host
     </button>
     <button 
       class="btn" id="beguest"
       :disabled="user.status == 0 || user.status == 3 || user.isProcess"
       @click="user.beGuest"
     >
-      ゲストになる
+      Guest
     </button>
   </div>
   <div class="controller">
