@@ -41,55 +41,59 @@ export class userClass {
       if(this._runConnection != undefined){
         this.disconnect();
       }
+
       this._runConnection = new WebSocket(Const.WS_ADDRESS);
       this._runConnection.onopen = () => {
         this._status.value = 1; // コネ確立
         this.checkServer();
         console.log("Connection is published!!!");
       };
+      
       this._runConnection.onerror = () => {
         console.log('エラーが発生しました。');
       };
+
       this._runConnection.onmessage = (event: any) => {
         const jsonData = JSON.parse(String(event.data));
-        // ホストになったことを受信
-        if(typeof jsonData.isHost !== 'undefined'){
-          this._status.value = jsonData.isHost ? 2 : 1; // 2:ホストor 1:接続済
-          this.makeStopper();
-          alert("あなたはホストになりました。")
-          return;
-        }
-        // ゲストになったことを受信
-        if(typeof jsonData.isGuest !== 'undefined'){
-          this._status.value = jsonData.isGuest ? 3 : 1; // 3:ゲストor 1:接続済
-          alert("あなたはゲストになりました。");
-          return;
-        }
-        // ホストがいるかどうかを受信
-        if(typeof jsonData.hostExists !== 'undefined'){
-          this._hostExists.value = jsonData.hostExists; // T or F
-          this._hostExists.value ? alert("ホストは存在します。"): alert("ホストはまだいません。");
-          return; 
-        }
-        // 計測中かどうか
-        if(typeof jsonData.isProcess !== 'undefined'){
-          this._isProcess.value = jsonData.isProcess; // T or F
-          this._isProcess.value ? alert("計測中です。"): alert("計測中ではありません。");
-        }
-        // ホストを譲った
-        if(typeof jsonData.notHost !== 'undefined'){
-          if(jsonData.notHost){
-            alert("ホストを譲りました。")
-            this._status.value = 1;
-            this._hostExists.value = false;
-            this._stopperConnection?.close();
-            this._runConnection!.send('beGuest');
-          }else{
-              alert('再起動してください');
-          }
+
+        switch(jsonData.type){
+          // ホストになったことを受信
+          case "isHost": 
+            this._status.value = jsonData.isHost ? 2 : 1; // 2:ホストor 1:接続済
+            this.makeStopper();
+            alert("あなたはホストになりました。");
+            break;
+          // ゲストになったことを受信
+          case "isGuest": 
+            this._status.value = jsonData.isGuest ? 3 : 1; // 3:ゲストor 1:接続済
+            alert("あなたはゲストになりました。");
+            break;
+          // ホストがいるかどうかを受信
+          case "hostExists":
+            this._hostExists.value = jsonData.hostExists; // T or F
+            this._hostExists.value ? alert("ホストは存在します。"): alert("ホストはまだいません。");
+            break;
+          // 計測中かどうか
+          case "isProcess":
+            this._isProcess.value = jsonData.isProcess; // T or F
+            this._isProcess.value ? alert("計測中です。"): alert("計測中ではありません。");
+            break;
+          // ホストを譲った
+          case "notHost":
+            if(jsonData.notHost){
+              alert("ホストを譲りました。")
+              this._status.value = 1;
+              this._hostExists.value = false;
+              this._stopperConnection?.close();
+              this._runConnection!.send('beGuest');
+            }else{
+                alert('再起動してください');
+            }
+            break;
         }
         console.log(jsonData);
       };
+
       this._runConnection.onclose = () => {
         this._status.value = 0; // 未コネ
         this.stopperDisconnect();
