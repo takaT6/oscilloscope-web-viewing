@@ -1,5 +1,5 @@
 # oscilloscope-viewing
-
+Demo => https://heretics-of-nagasaki.com/osc
 ## Project setup
 ```
 npm install
