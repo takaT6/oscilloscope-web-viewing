@@ -1,3 +1,11 @@
+/**
+	 * 画像情報の取得
+	 *
+	 * @param clientArgs 引数[key, runMode]
+	 * @return 処理結果
+	 * @throws JSONException
+	 */
+
 export const Const = {
   WS_ADDRESS: "ws://localhost:8088/echo",
 }
@@ -57,6 +65,7 @@ export class userClass {
         const jsonData = JSON.parse(String(event.data));
 
         switch(jsonData.type){
+          
           // ホストになったことを受信
           case "isHost": 
             this._status.value = jsonData.isHost ? 2 : 1; // 2:ホストor 1:接続済
