@@ -94,7 +94,7 @@ export class userClass {
               this._status.value = 1;
               this._hostExists.value = false;
               this._stopperConnection?.close();
-              this._runConnection!.send('beGuest');
+              this._runConnection?.send('beGuest');
             }else{
                 alert('再起動してください');
             }
