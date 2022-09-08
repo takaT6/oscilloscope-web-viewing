@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import LineChart from './LineChart.vue'
-import { defineAsyncComponent } from "vue";
+import { defineAsyncComponent } from "vue"
 
 // Lazy loading
 const WSController = defineAsyncComponent(

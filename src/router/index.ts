@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import OscilloscopeView from '../views/OscilloscopeView.vue'
+import HistoryView from '../views/HistoryView.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -11,6 +12,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/oscilloscope',
     name: 'oscilloscope',
     component: OscilloscopeView
+  },
+  {
+    path: '/history',
+    name: 'history',
+    component: HistoryView
   },
   {
     path: '/about',

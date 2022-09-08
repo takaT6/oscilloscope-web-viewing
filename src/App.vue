@@ -2,6 +2,7 @@
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/oscilloscope">Oscilloscope</router-link> |
+    <router-link to="/history">history</router-link> |
     <router-link to="/about">About</router-link>
   </nav>
   <router-view />
