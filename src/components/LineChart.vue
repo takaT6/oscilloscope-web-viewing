@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts" >
-import { defineComponent, h, PropType } from 'vue'
+import { PropType } from 'vue'
 
 import { Line } from 'vue-chartjs'
 import {

@@ -61,7 +61,7 @@ export class userClass {
         console.log('エラーが発生しました。');
       };
 
-      this._runConnection.onmessage = (event: any) => {
+      this._runConnection.onmessage = (event) => {
         const jsonData = JSON.parse(String(event.data));
 
         switch(jsonData.type){
@@ -117,14 +117,14 @@ export class userClass {
 
   // コネクション切断
   public disconnect = (): void => {
-    this._runConnection!.close();
+    this._runConnection?.close();
     this.stopperDisconnect();
   }
 
   // 計測実行
   public run = () => {
     if( this._status.value == 2){
-      this._runConnection!.send('run');
+      this._runConnection?.send('run');
     }else{
       console.log("コネクションが確立していません。");
       console.log(this._status.value);
@@ -135,10 +135,10 @@ export class userClass {
   public stop = (): void => {
     if(this._status.value == 2){
       if(this._stopperStatus == 1){
-        this._stopperConnection!.send('stop');
+        this._stopperConnection?.send('stop');
       }else if(this._stopperStatus == 0){
         this.makeStopper();
-        this._stopperConnection!.send('stop');
+        this._stopperConnection?.send('stop');
       }
     }
   }
@@ -148,7 +148,7 @@ export class userClass {
   public checkServer = () => {
     if( this._status.value > 0){
       console.log("サーバーの状態をテェック中");
-      this._runConnection!.send('checkServer');
+      this._runConnection?.send('checkServer');
     }else{
       console.log("コネクションが確立していません。");
       console.log(this._status.value);
@@ -158,7 +158,7 @@ export class userClass {
   // ホストをとる
   public beHost = (): void => {
     if( (this._status.value == 1 || this._status.value == 3) && !this._hostExists.value){// 1:接続済, 3:ゲスト 
-      this._runConnection!.send('beHost');
+      this._runConnection?.send('beHost');
     }else{
       console.log("コネクションが確立していません。");
       console.log(this._status.value);
@@ -168,11 +168,11 @@ export class userClass {
   // ゲストになる
   public beGuest = (): void => {
     if(this._status.value == 1){// 1:接続済
-      this._runConnection!.send('beGuest');
+      this._runConnection?.send('beGuest');
     }else if(this._status.value == 2){// 2:ホスト
-      this._runConnection!.send('resignHost');
-      // this._runConnection!.send('beGuest');
-      // setTimeout(() => this._runConnection!.send('beGuest'),1000);
+      this._runConnection?.send('resignHost');
+      // this._runConnection?.send('beGuest');
+      // setTimeout(() => this._runConnection?.send('beGuest'),1000);
         
     }else{
       console.log("コネクションが確立していません。");
@@ -184,16 +184,16 @@ export class userClass {
   private makeStopper = (): boolean => {
     if ('WebSocket' in window) {
       this._stopperConnection = new WebSocket(Const.WS_ADDRESS);
-      this._stopperConnection!.onopen = () => {
+      this._stopperConnection.onopen = () => {
         this._stopperStatus = 1;
       };
-      this._stopperConnection!.onerror = () => {
+      this._stopperConnection.onerror = () => {
         //do nothing
       };
-      this._stopperConnection!.onmessage = (event: any) => {
+      this._stopperConnection.onmessage = () => {
         //do nothing
       };
-      this._stopperConnection!.onclose = () => {
+      this._stopperConnection.onclose = () => {
         this._stopperStatus = 0;
       };
       return true;

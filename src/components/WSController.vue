@@ -1,5 +1,5 @@
 <template>
-  <teleport to="#teleport-component"> 
+  <teleport to="#connection-controller"> 
     <div class="controller">
       <!-- コネクトボタン start -->
       <button 

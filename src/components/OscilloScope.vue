@@ -1,7 +1,7 @@
 <template>
-  <div id="teleport-component"/>
+  <div id="connection-controller"/>
   <div class="controller">
-    <!-- <WSController/> -->
+    <WSController/>
   </div>
   <div class="chart">
     oscilloscope
@@ -10,19 +10,13 @@
 </template>
 
 <script setup lang="ts">
-<<<<<<< HEAD
-import BarChart from './BarChart.vue'
+import LineChart from './LineChart.vue'
 import { defineAsyncComponent } from "vue";
 
 // Lazy loading
 const WSController = defineAsyncComponent(
   () => import("./WSController.vue")
 );
-=======
-// import BarChart from './BarChart.vue'
-// import WSController from './WSController.vue';
-import LineChart from './LineChart.vue'
->>>>>>> 4dfd2a4a1159a41fa74b397406e76482f1f827ca
 
 </script>
 
