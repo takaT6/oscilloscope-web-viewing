@@ -1,5 +1,5 @@
 <template>
-  <Bar
+  <Line
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartId"
@@ -12,55 +12,63 @@
   />
 </template>
 
-<script lang="ts">
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+<script setup lang="ts" >
+import { defineComponent, h, PropType } from 'vue'
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+import { Line } from 'vue-chartjs'
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  LinearScale,
+  PointElement,
+  CategoryScale,
+  Plugin
+} from 'chart.js'
 
-export default {
-  name: 'BarChart',
-  components: { Bar },
-  props: {
-    chartId: {
-      type: String,
-      default: 'bar-chart'
-    },
-    datasetIdKey: {
-      type: String,
-      default: 'label'
-    },
-    width: {
-      type: Number,
-      default: 400
-    },
-    height: {
-      type: Number,
-      default: 400
-    },
-    cssClasses: {
-      default: '',
-      type: String
-    },
-    styles: {
-      type: Object,
-      default: () => {console.log("hoge");}
-    },
-    plugins: {
-      type: Object,
-      default: () => {console.log("hoge");}
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  LinearScale,
+  PointElement,
+  CategoryScale
+)
+
+const chartId = 'line-chart';
+const width = 400;
+const height = 400;
+const cssClasses = '';
+const styles: PropType<Partial<CSSStyleDeclaration>> = () => {return {}};//Object as PropType<Partial<CSSStyleDeclaration>>,
+const plugins: PropType<Plugin<'line'>[]> = () => {return []};
+const chartData = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [
+    {
+      label: 'Data One',
+      backgroundColor: '#f87979',
+      data: [40, 39, 10, 40, 39, 80, 40]
     }
-  },
-  data() {
-    return {
-      chartData: {
-        labels: [ 'January', 'February', 'March' ],
-        datasets: [ { data: [40, 20, 12] } ]
-      },
-      chartOptions: {
-        responsive: true
-      }
-    }
-  }
+  ]
 }
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false
+}
+    // return () =>
+    //   h(Line, {
+    //     chartData,
+    //     chartOptions,
+    //     chartId: props.chartId,
+    //     width: props.width,
+    //     height: props.height,
+    //     cssClasses: props.cssClasses,
+    //     styles: props.styles,
+    //     plugins: props.plugins
+    //   })
+
+
 </script>
