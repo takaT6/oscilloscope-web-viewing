@@ -1,10 +1,10 @@
 /**
-	 * 画像情報の取得
-	 *
-	 * @param clientArgs 引数[key, runMode]
-	 * @return 処理結果
-	 * @throws JSONException
-	 */
+ * 画像情報の取得
+ *
+ * @param clientArgs 引数[key, runMode]
+ * @return 処理結果
+ * @throws JSONException
+ */
 
 export const Const = {
   WS_ADDRESS: "ws://localhost:8088/echo",
@@ -68,28 +68,28 @@ export class userClass {
           
           // ホストになったことを受信
           case "isHost": 
-            this._status.value = jsonData.isHost ? 2 : 1; // 2:ホストor 1:接続済
+            this._status.value = jsonData.value ? 2 : 1; // 2:ホストor 1:接続済
             this.makeStopper();
-            alert("あなたはホストになりました。");
+            // alert("あなたはホストになりました。");
             break;
           // ゲストになったことを受信
           case "isGuest": 
-            this._status.value = jsonData.isGuest ? 3 : 1; // 3:ゲストor 1:接続済
-            alert("あなたはゲストになりました。");
+            this._status.value = jsonData.value ? 3 : 1; // 3:ゲストor 1:接続済
+            // alert("あなたはゲストになりました。");
             break;
           // ホストがいるかどうかを受信
           case "hostExists":
-            this._hostExists.value = jsonData.hostExists; // T or F
-            this._hostExists.value ? alert("ホストは存在します。"): alert("ホストはまだいません。");
+            this._hostExists.value = jsonData.value; // T or F
+            // this._hostExists.value ? alert("ホストは存在します。"): alert("ホストはまだいません。");
             break;
           // 計測中かどうか
           case "isProcess":
-            this._isProcess.value = jsonData.isProcess; // T or F
-            this._isProcess.value ? alert("計測中です。"): alert("計測中ではありません。");
+            this._isProcess.value = jsonData.value; // T or F
+            // this._isProcess.value ? alert("計測中です。"): alert("計測中ではありません。");
             break;
           // ホストを譲った
           case "notHost":
-            if(jsonData.notHost){
+            if(jsonData.value){
               alert("ホストを譲りました。")
               this._status.value = 1;
               this._hostExists.value = false;

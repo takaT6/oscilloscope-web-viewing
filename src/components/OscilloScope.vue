@@ -1,4 +1,5 @@
 <template>
+  <div id="teleport-component"/>
   <div class="controller">
     <WSController/>
   </div>
@@ -10,8 +11,12 @@
 
 <script setup lang="ts">
 import BarChart from './BarChart.vue'
-import WSController from './WSController.vue';
+import { defineAsyncComponent } from "vue";
 
+// Lazy loading
+const WSController = defineAsyncComponent(
+  () => import("./WSController.vue")
+);
 
 </script>
 

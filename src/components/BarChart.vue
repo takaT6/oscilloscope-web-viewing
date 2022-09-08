@@ -1,164 +1,66 @@
 <template>
-  <LineChart
-    :chart-options="chartOptions"
-    :chart-data="chartData"
-    :chart-id="chartId"
-    :dataset-id-key="datasetIdKey"
-    :plugins="plugins"
-    :css-classes="cssClasses"
-    :styles="styles"
-    :width="width"
-    :height="height"
-  />
+  <canvas id="chart"/>
 </template>
 
 <script setup lang="ts">
-import {PropType, computed, ref} from 'vue'
-import { Line } from 'vue-chartjs'
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  CategoryScale,
-  Plugin,
-  ChartData
-} from 'chart.js'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { Chart, registerables } from 'chart.js'
+Chart.register(...registerables);
 
-ChartJS.register(
-  Title,
-  Tooltip,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  CategoryScale
-)
+////////////////////////////////////////////////////////////////////////////////
+// data
+////////////////////////////////////////////////////////////////////////////////
+let chart = {}; // チャートオブジェクト
+const chart_height = 400; // チャートの高さ
+let chart_options = { // チャートのオプション
+    scales: {
+        y: {
+            beginAtZero: true
+        }
+    },
+};
+let chart_data = { // チャートのデータ
+    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+    datasets: [{
+        label: "# of Votes",
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+            "rgba(255, 99, 132, 0.2)",
+            "rgba(54, 162, 235, 0.2)",
+            "rgba(255, 206, 86, 0.2)",
+            "rgba(75, 192, 192, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
+            "rgba(255, 159, 64, 0.2)"
+        ],
+        borderColor: [
+            "rgba(255, 99, 132, 1)",
+            "rgba(54, 162, 235, 1)",
+            "rgba(255, 206, 86, 1)",
+            "rgba(75, 192, 192, 1)",
+            "rgba(153, 102, 255, 1)",
+            "rgba(255, 159, 64, 1)"
+        ],
+        borderWidth: 1
+    }]
+};
 
-
-interface Props {
-  chartId: string;
-  width: number;
-  height: number;
-  cssClasses: string;
-  // styles: Object; //Object as PropType<Partial<CSSStyleDeclaration>>
-  // plugins:  Array<Plugin<'line'>[]>; //Array as PropType<Plugin<'line'>[]>
-  styles: PropType<Partial<CSSStyleDeclaration>>;
-  plugins: PropType<Plugin<'line'>[]>;
-  chartData: {
-    labels: string[];
-    datasets: Array<{
-      label: string,
-      backgroundColor: string,
-      data:number[]
-    }>;
-  };
-  chartOptions: {
-    responsive: boolean,
-    maintainAspectRatio: boolean
-  }
-}
-const props =  withDefaults(defineProps<Props>(), {
-  chartId: 'line-chart',
-  width: 400,
-  height: 400,
-  cssClasses: '',
-  styles: () => {return {}},
-  plugins: () => [],
-  // chartData: () => {return{
-  //   labels: () => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  //   datasets: () => [{
-  //     label: 'Data One',
-  //     backgroundColor: '#f87979',
-  //     data: [40, 39, 10, 40, 39, 80, 40]
-  //   }]
-  // }},
-  // chartOptions: () => {return{
-  //   responsive: true,
-  //   maintainAspectRatio: false
-  // }}
+////////////////////////////////////////////////////////////////////////////////
+// onMountedライフサイクルフック
+////////////////////////////////////////////////////////////////////////////////
+onMounted(() => {
+    renderChart();
 });
-const dataValues = ref([40, 39, 10, 40, 39, 80, 40]);
-const chartData = computed<ChartData<'doughnut'>>(() => ({
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-  datasets: [
-    {
-      label: 'Data One',
-      backgroundColor: '#f87979',
-      data: dataValues.value
-    }
-  ]
-}));
 
-const chartOptions = {
-  responsive: true,
-  maintainAspectRatio: false
-}
-// const h = () => { return (Line, {
-//         chartData,
-//         chartOptions,
-//         chartId: props.chartId,
-//         width: props.width,
-//         height: props.height,
-//         cssClasses: props.cssClasses,
-//         styles: props.styles,
-//         plugins: props.plugins
-//       })
-// }
-// interface Datasets = {
-//     label: string,
-//     backgroundColor: string,
-//     data: Array<number>
-// }
-// interface Props2 {
-//   labels: string[];
-//   datasets: Array<{
-//     label: string,
-//     backgroundColor: string,
-//     data: Array<number>
-//   }>;
-  // datasets: Array<Ob>
-// }
-// const chartData =  withDefaults(defineProps<Props2>(), {
-//   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'] as string[],
-//   datasets: [{
-//     label: 'Data One',
-//     backgroundColor: '#f87979',
-//     data: [40, 39, 10, 40, 39, 80, 40]
-//   }]
-// });
-
-//   setup(props) {
-//     const chartData = {
-//       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//       datasets: [
-//         {
-//           label: 'Data One',
-//           backgroundColor: '#f87979',
-//           data: [40, 39, 10, 40, 39, 80, 40]
-//         }
-//       ]
-//     }
-
-//     const chartOptions = {
-//       responsive: true,
-//       maintainAspectRatio: false
-//     }
-
-//     return () =>
-//       h(Line, {
-//         chartData,
-//         chartOptions,
-//         chartId: props.chartId,
-//         width: props.width,
-//         height: props.height,
-//         cssClasses: props.cssClasses,
-//         styles: props.styles,
-//         plugins: props.plugins
-//       })
-//   }
-// })
+////////////////////////////////////////////////////////////////////////////////
+// チャートを描画する
+////////////////////////////////////////////////////////////////////////////////
+const renderChart = () => {
+  const canvas = document.getElementById('chart') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d')!;
+  chart = new Chart(ctx, {
+      type: "bar",
+      data: chart_data,
+      options: chart_options,
+  });
+};
 </script>

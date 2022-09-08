@@ -1,20 +1,26 @@
 <template>
-  <div class="controller">
-    <button 
-      class="btn" id="connect"
-      :disabled="user.status >= 1"
-      @click="user.connect"
-    >
-      Connect
-    </button>
-    <button 
-      class="btn" id="disconnect" 
-      :disabled="user.status == 0 || user.isProcess"
-      @click="user.disconnect"
+  <teleport to="#teleport-component"> 
+    <div class="controller">
+      <!-- コネクトボタン start -->
+      <button 
+        class="btn" id="connect"
+        :disabled="user.status >= 1"
+        @click="user.connect"
       >
-        Disconnect
+        Connect
       </button>
-  </div>
+      <!-- コネクトボタン end -->
+      <!-- ディスコネクトボタン start -->
+      <button 
+        class="btn" id="disconnect" 
+        :disabled="user.status == 0 || user.isProcess"
+        @click="user.disconnect"
+        >
+          Disconnect
+      </button>
+      <!-- ディスコネクトボタン end -->
+    </div>
+  </teleport>
   <div class="controller">
     <button 
       class="btn" id="behost"
