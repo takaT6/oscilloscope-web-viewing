@@ -3,10 +3,7 @@
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartId"
-    :dataset-id-key="datasetIdKey"
-    :plugins="plugins"
     :css-classes="cssClasses"
-    :styles="styles"
     :width="width"
     :height="height"
   />
@@ -42,8 +39,8 @@ const chartId = 'line-chart';
 const width = 400;
 const height = 400;
 const cssClasses = '';
-const styles: PropType<Partial<CSSStyleDeclaration>> = () => {return {}};//Object as PropType<Partial<CSSStyleDeclaration>>,
-const plugins: PropType<Plugin<'line'>[]> = () => {return []};
+// const styles: PropType<Partial<CSSStyleDeclaration>> = [];//Object as PropType<Partial<CSSStyleDeclaration>>
+// const plugins: PropType<Plugin<'line'>[]> = [];
 const chartData = {
   labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
   datasets: [
