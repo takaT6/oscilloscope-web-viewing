@@ -11,7 +11,6 @@
 
 <script setup lang="ts" >
 import { PropType } from 'vue'
-
 import { Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -34,7 +33,7 @@ ChartJS.register(
   PointElement,
   CategoryScale
 )
-
+const props = defineProps({data: Array, timestamp: Array});
 const chartId = 'line-chart';
 const width = 400;
 const height = 400;
@@ -42,12 +41,12 @@ const cssClasses = '';
 // const styles: PropType<Partial<CSSStyleDeclaration>> = [];//Object as PropType<Partial<CSSStyleDeclaration>>
 // const plugins: PropType<Plugin<'line'>[]> = [];
 const chartData = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: [],
   datasets: [
     {
       label: 'Data One',
       backgroundColor: '#f87979',
-      data: [40, 39, 10, 40, 39, 80, 40]
+      data: []
     }
   ]
 }

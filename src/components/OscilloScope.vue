@@ -1,17 +1,20 @@
 <template>
   <div id="connection-controller"/>
   <div class="controller">
-    <WSController/>
+    <WSController :data="data" :timestamp="timestamp"/>
   </div>
   <div class="chart">
     oscilloscope
-    <LineChart />
+    <LineChart :data="data" :timestamp="timestamp"/>
   </div>
 </template>
 
 <script setup lang="ts">
 import LineChart from './LineChart.vue'
-import { defineAsyncComponent } from "vue"
+import { ref, defineAsyncComponent } from "vue"
+
+var data = ref([]);
+var timestamp = ref([]);
 
 // Lazy loading
 const WSController = defineAsyncComponent(

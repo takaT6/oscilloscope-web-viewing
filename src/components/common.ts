@@ -9,7 +9,7 @@
 export const Const = {
   WS_ADDRESS: "ws://localhost:8088/echo",
 }
-import {ref, Ref} from 'vue';
+import {ref, Ref, defineEmits} from 'vue';
 export class userClass {
   private _runConnection?: WebSocket; // WebSocket
   private _status: Ref<number>; // 0: 未コネ, 1: 接続済, 2: ホスト, 3: ゲスト 
@@ -17,6 +17,8 @@ export class userClass {
   private _stopperConnection?: WebSocket; // 停止用WebSocket
   private _stopperStatus: number; // 0: 未コネ, 1: 接続済 
   private _isProcess: Ref<boolean>;
+  private _data: Ref<Array<number>>;
+  private _timestamp: Ref<Array<string>>;
   
   // コンストラクタ
   constructor() {
@@ -26,6 +28,8 @@ export class userClass {
     this._stopperStatus = 0;
     this._hostExists = ref(true);
     this._isProcess = ref(false);
+    this._data = ref([]);
+    this._timestamp = ref([]);
   }
 
   //getter
@@ -41,6 +45,14 @@ export class userClass {
   //getter
   get isProcess(): boolean {
     return this._isProcess.value;
+  }
+
+  get data(): number[] {
+    return this._data.value;
+  }
+
+  get timestamp(): string[] {
+    return this._timestamp.value;
   }
 
   // コネクションの確立
@@ -65,7 +77,10 @@ export class userClass {
         const jsonData = JSON.parse(String(event.data));
 
         switch(jsonData.type){
-          
+          case "data": 
+            this._data.value.push(jsonData.value);
+            this._timestamp.value.push(jsonData.value);
+            break;
           // ホストになったことを受信
           case "isHost": 
             this._status.value = jsonData.value ? 2 : 1; // 2:ホストor 1:接続済

@@ -53,9 +53,23 @@
 
 <script setup lang="ts">
 import {userClass} from "./common"
-
+import {watch} from 'vue';
 const user = new userClass();
 
+const props = defineProps({data: Array, timestamp: Array});
+
+const emit = defineEmits(['update:data','update:timestamp']);
+
+watch(user.data, () => {
+  // emit("data", user.data.value);
+  emit('update:data', user.data);
+  console.log("hoge")
+});
+watch(user.timestamp, () => {
+  // emit("timestamp", user.timestamp.value);
+  emit('update:timestamp', user.timestamp);
+  console.log("hoge")
+});
 
 </script>
 
