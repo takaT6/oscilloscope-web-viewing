@@ -1,11 +1,17 @@
 <template>
   <div id="connection-controller"/>
   <div class="controller">
-    <WSController :data="data" :timestamp="timestamp"/>
+    <WSController 
+      v-model:data="data" 
+      v-model:timestamp="timestamp"
+    />
   </div>
   <div class="chart">
     oscilloscope
-    <LineChart :data="data" :timestamp="timestamp"/>
+    <LineChart 
+      v-model:data="data" 
+      v-model:timestamp="timestamp"
+    />
   </div>
 </template>
 
