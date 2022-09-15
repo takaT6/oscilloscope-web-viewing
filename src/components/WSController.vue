@@ -52,8 +52,8 @@
 </template>
 
 <script setup lang="ts">
-import {userClass} from "./common"
-import {watch} from 'vue';
+import { userClass } from "./common"
+import { watch } from 'vue';
 const user = new userClass();
 
 const props = defineProps({data: Array, timestamp: Array});
