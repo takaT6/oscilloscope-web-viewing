@@ -1,26 +1,25 @@
-/**
- * 画像情報の取得
- *
- * @param clientArgs 引数[key, runMode]
- * @return 処理結果
- * @throws JSONException
- */
-
 export const Const = {
   WS_ADDRESS: "ws://localhost:8088/echo",
 }
-import {ref, Ref, defineEmits} from 'vue';
+
+
+/**
+ * UserClass
+ */
+import { ref, Ref } from 'vue';
 export class userClass {
   private _runConnection?: WebSocket; // WebSocket
-  private _status: Ref<number>; // 0: 未コネ, 1: 接続済, 2: ホスト, 3: ゲスト 
+  private _status: Ref<number>; // 0: 未コネ, 1: connected, 2: host, 3: guest 
   private _hostExists: Ref<boolean>; // ホストが存在するかどうか
   private _stopperConnection?: WebSocket; // 停止用WebSocket
-  private _stopperStatus: number; // 0: 未コネ, 1: 接続済 
+  private _stopperStatus: number; // 0: 未コネ, 1: connected 
   private _isProcess: Ref<boolean>;
   private _data: Ref<Array<number>>;
   private _timestamp: Ref<Array<string>>;
   
-  // コンストラクタ
+  /**
+   * Constructor.
+   */
   constructor() {
     this._runConnection = undefined;
     this._stopperConnection = undefined;
@@ -32,12 +31,12 @@ export class userClass {
     this._timestamp = ref([]);
   }
 
-  //getter
+  // getter
   get hostExists(): boolean {
     return this._hostExists.value;
   }
 
-  //getter
+  // getter
   get status(): number {
     return this._status.value;
   }
@@ -47,70 +46,86 @@ export class userClass {
     return this._isProcess.value;
   }
 
+  // getter
   get data(): number[] {
     return this._data.value;
   }
 
+  // getter
   get timestamp(): string[] {
     return this._timestamp.value;
   }
 
-  // コネクションの確立
+  /**
+   * Connect with WebSocket server.
+   * @returns
+   * @public
+   */
   public connect = (): boolean => {
     if ('WebSocket' in window) {
-      if(this._runConnection != undefined){
+      if (this._runConnection != undefined) {
         this.disconnect();
       }
 
+      // create a WebSocket Object
       this._runConnection = new WebSocket(Const.WS_ADDRESS);
+
+      // define WebSocket Open Event
       this._runConnection.onopen = () => {
         this._status.value = 1; // コネ確立
         this.checkServer();
         console.log("Connection is published!!!");
       };
       
+      // define WebSocket Error Event
       this._runConnection.onerror = () => {
         console.log('エラーが発生しました。');
       };
 
+      // define WebSocket Event when catch messages
       this._runConnection.onmessage = (event) => {
         const jsonData = JSON.parse(String(event.data));
 
-        switch(jsonData.type){
+        switch (jsonData.type) {
           case "data": 
             this._data.value.push(jsonData.value);
             this._timestamp.value.push(jsonData.value);
             break;
-          // ホストになったことを受信
+
+          // recieve "isHost"
           case "isHost": 
-            this._status.value = jsonData.value ? 2 : 1; // 2:ホストor 1:接続済
+            this._status.value = jsonData.value ? 2 : 1; // 2:host or 1:connected
             this.makeStopper();
             // alert("あなたはホストになりました。");
             break;
-          // ゲストになったことを受信
+
+          // recieve "isGuest"
           case "isGuest": 
-            this._status.value = jsonData.value ? 3 : 1; // 3:ゲストor 1:接続済
-            // alert("あなたはゲストになりました。");
+            this._status.value = jsonData.value ? 3 : 1; // 3:guest or 1:connected
+            // alert("あなたはguestになりました。");
             break;
-          // ホストがいるかどうかを受信
+
+          // recieve "hostExists"
           case "hostExists":
             this._hostExists.value = jsonData.value; // T or F
             // this._hostExists.value ? alert("ホストは存在します。"): alert("ホストはまだいません。");
             break;
-          // 計測中かどうか
+
+          // recieve "isProcess"
           case "isProcess":
             this._isProcess.value = jsonData.value; // T or F
             // this._isProcess.value ? alert("計測中です。"): alert("計測中ではありません。");
             break;
-          // ホストを譲った
+
+          // recieve "notHost"
           case "notHost":
-            if(jsonData.value){
+            if (jsonData.value) {
               alert("ホストを譲りました。")
               this._status.value = 1;
               this._hostExists.value = false;
               this._stopperConnection?.close();
               this._runConnection?.send('beGuest');
-            }else{
+            } else {
                 alert('再起動してください');
             }
             break;
@@ -118,6 +133,7 @@ export class userClass {
         console.log(jsonData);
       };
 
+      // define WebSocket Close Event
       this._runConnection.onclose = () => {
         this._status.value = 0; // 未コネ
         this.stopperDisconnect();
@@ -130,87 +146,122 @@ export class userClass {
     }
   }
 
-  // コネクション切断
+  /**
+   * Disconnect from WebSocket server.
+   * @public
+   */
   public disconnect = (): void => {
     this._runConnection?.close();
     this.stopperDisconnect();
   }
 
-  // 計測実行
+  /**
+   * Send "run" message to WS server.
+   * WS server will run measurement and return "isProcess" .
+   * @public
+   */
   public run = () => {
-    if( this._status.value == 2){
+    if ( this._status.value == 2) {
       this._runConnection?.send('run');
-    }else{
+    } else {
       console.log("コネクションが確立していません。");
       console.log(this._status.value);
     }
   }
 
-  // プロセスの停止
+  /**
+   * Send "stop" message to WS server.
+   * WS server will stop measurement and return "isProcess".
+   * @public
+   */
   public stop = (): void => {
-    if(this._status.value == 2){
-      if(this._stopperStatus == 1){
+    if (this._status.value == 2) {
+      if (this._stopperStatus == 1) {
         this._stopperConnection?.send('stop');
-      }else if(this._stopperStatus == 0){
+      } else if (this._stopperStatus == 0) {
         this.makeStopper();
         this._stopperConnection?.send('stop');
       }
     }
   }
 
-
-  // サーバーの状態を確認する
+  /**
+   * Send "checkServer" message to WS server.
+   * WS server will return server status of "hostExists" and "isProcess". 
+   * @public
+   */
   public checkServer = () => {
-    if( this._status.value > 0){
+    if ( this._status.value > 0) {
       console.log("サーバーの状態をテェック中");
       this._runConnection?.send('checkServer');
-    }else{
+    } else {
       console.log("コネクションが確立していません。");
       console.log(this._status.value);
     }
   }
 
-  // ホストをとる
+  /**
+   * Send "beHost" message to WS server.
+   * If there is no host, WS server will return "isHost"=ture and "hostExists"=true . 
+   * @public
+   */
   public beHost = (): void => {
-    if( (this._status.value == 1 || this._status.value == 3) && !this._hostExists.value){// 1:接続済, 3:ゲスト 
+    if ( (this._status.value == 1 || this._status.value == 3) && !this._hostExists.value) {// 1:connected, 3:guest 
       this._runConnection?.send('beHost');
-    }else{
+    } else {
       console.log("コネクションが確立していません。");
       console.log(this._status.value);
     }
   }
 
-  // ゲストになる
+  /**
+   * Send "beGuest" message to WS server.
+   * Whatever there is a host, WS server will return "isGuest"=true . 
+   * @public
+   */
   public beGuest = (): void => {
-    if(this._status.value == 1){// 1:接続済
+    if (this._status.value == 1) {// 1:connected
       this._runConnection?.send('beGuest');
-    }else if(this._status.value == 2){// 2:ホスト
+    } else if (this._status.value == 2) {// 2:host
       this._runConnection?.send('resignHost');
       // this._runConnection?.send('beGuest');
       // setTimeout(() => this._runConnection?.send('beGuest'),1000);
         
-    }else{
+    } else {
       console.log("コネクションが確立していません。");
       console.log(this._status.value);
     }
   }
 
-  //ストッパーの作成
+  /**
+   * Make one more WebSocket connection for stoping measurement.
+   * @private
+   */
   private makeStopper = (): boolean => {
+
     if ('WebSocket' in window) {
       this._stopperConnection = new WebSocket(Const.WS_ADDRESS);
+
+      // define WebSocket Open Event
       this._stopperConnection.onopen = () => {
         this._stopperStatus = 1;
       };
+
+      // define WebSocket Error Event
       this._stopperConnection.onerror = () => {
-        //do nothing
+        // do nothing
       };
+
+      // define WebSocket Event when catch messages
       this._stopperConnection.onmessage = () => {
-        //do nothing
+        // do nothing
       };
+
+      // define WebSocket Close Event
       this._stopperConnection.onclose = () => {
         this._stopperStatus = 0;
       };
+
       return true;
     } else {
       console.log('WebSocket NOT supported in this browser');
@@ -218,8 +269,12 @@ export class userClass {
     }
   }
 
+  /**
+   * Disconnect Stpper Connection from WebSocket server.
+   * @private
+   */
   private stopperDisconnect = () => {
-    if(this._stopperConnection != undefined){
+    if (this._stopperConnection != undefined) {
       this._stopperConnection.close();
     }
   }
