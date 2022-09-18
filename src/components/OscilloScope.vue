@@ -1,38 +1,47 @@
 <template>
   <div id="connection-controller"/>
   <div class="controller">
-    <WSController 
-      v-model:data="data" 
-      v-model:timestamp="timestamp"
+    <WSController
+      v-model:chartData="chartData"
     />
   </div>
   <div class="chart">
     oscilloscope
-    <LineChart 
-      v-model:data="data" 
-      v-model:timestamp="timestamp"
+    <LineChart
+      v-model:chartData="chartData"
     />
   </div>
+  <button id="debugger1" @click="debugger1">log timestamp</button>
 </template>
 
 <script setup lang="ts">
 import LineChart from './LineChart.vue'
 import { ref, defineAsyncComponent } from "vue"
 
-var data = ref([]);
-var timestamp = ref([]);
-
+var chartData = ref({
+  labels: [],
+  datasets: [
+    {
+      label: 'Data One',
+      backgroundColor: '#f87979',
+      data: []
+    }
+  ]
+})
 // Lazy loading
 const WSController = defineAsyncComponent(
   () => import("./WSController.vue")
 );
 
+const debugger1 = () => {
+  console.log(chartData.value)
+}
 </script>
 
 <style scoped lang="scss">
 
 .chart {
   // height: auto;
-  width: 50vw;
+  // width: 50vw;
 }
 </style>

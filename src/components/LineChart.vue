@@ -1,7 +1,7 @@
 <template>
   <Line
     :chart-options="chartOptions"
-    :chart-data="chartData"
+    :chart-data="(props.chartData as ChartData<'line'>)"
     :chart-id="chartId"
     :css-classes="cssClasses"
     :width="width"
@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts" >
-import { PropType } from 'vue'
+import { ObjectHTMLAttributes, PropType } from 'vue'
 import { Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -21,7 +21,9 @@ import {
   LinearScale,
   PointElement,
   CategoryScale,
-  Plugin
+  Plugin,
+  ChartData,
+  DefaultDataPoint
 } from 'chart.js'
 
 ChartJS.register(
@@ -33,23 +35,16 @@ ChartJS.register(
   PointElement,
   CategoryScale
 )
-const props = defineProps({data: Array, timestamp: Array});
+
+const props = defineProps({chartData: Object});
 const chartId = 'line-chart';
 const width = 400;
 const height = 400;
 const cssClasses = '';
+
 // const styles: PropType<Partial<CSSStyleDeclaration>> = [];//Object as PropType<Partial<CSSStyleDeclaration>>
 // const plugins: PropType<Plugin<'line'>[]> = [];
-const chartData = {
-  labels: [],
-  datasets: [
-    {
-      label: 'Data One',
-      backgroundColor: '#f87979',
-      data: []
-    }
-  ]
-}
+
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false

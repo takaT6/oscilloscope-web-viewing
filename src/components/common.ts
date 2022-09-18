@@ -2,6 +2,16 @@ export const Const = {
   WS_ADDRESS: "ws://localhost:8088/echo",
 }
 
+export interface ChartDataInterface{
+  labels: Array<number>,
+  datasets: Array<{
+    label: string,
+    backgroundColor: string,
+    data: Array<number>,
+    showLine: boolean,
+    animation:boolean,
+  }>
+}
 
 /**
  * UserClass
@@ -14,8 +24,11 @@ export class userClass {
   private _stopperConnection?: WebSocket; // 停止用WebSocket
   private _stopperStatus: number; // 0: 未コネ, 1: connected 
   private _isProcess: Ref<boolean>;
-  private _data: Ref<Array<number>>;
-  private _timestamp: Ref<Array<string>>;
+
+  private _chartData: Ref<ChartDataInterface>;
+  private _updatedChartData: ChartDataInterface;
+
+  private _showLine = true;
   
   /**
    * Constructor.
@@ -27,8 +40,39 @@ export class userClass {
     this._stopperStatus = 0;
     this._hostExists = ref(true);
     this._isProcess = ref(false);
-    this._data = ref([]);
-    this._timestamp = ref([]);
+    this._chartData = ref({
+      labels: [],
+      datasets: [{
+        label: 'Data One',
+        backgroundColor: 'f87979',
+        data: [],
+        showLine: this._showLine,
+        animation:false,
+      }]
+    });
+    this._updatedChartData = {
+      labels: [],
+      datasets: [{
+        label: 'Data One',
+        backgroundColor: 'f87979',
+        data: [],
+        showLine: this._showLine,
+        animation:false,
+      }]
+    }
+  }
+
+  private resetChartData = () => {
+    this._updatedChartData = {
+      labels: [],
+      datasets: [{
+        label: 'Data One',
+        backgroundColor: 'f87979',
+        data: [],
+        showLine: this._showLine,
+        animation:false,
+      }]
+    }
   }
 
   // getter
@@ -47,18 +91,12 @@ export class userClass {
   }
 
   // getter
-  get data(): number[] {
-    return this._data.value;
-  }
-
-  // getter
-  get timestamp(): string[] {
-    return this._timestamp.value;
+  get chartData() {
+    return this._chartData;
   }
 
   /**
    * Connect with WebSocket server.
-   * @returns
    * @public
    */
   public connect = (): boolean => {
@@ -87,9 +125,10 @@ export class userClass {
         const jsonData = JSON.parse(String(event.data));
 
         switch (jsonData.type) {
-          case "data": 
-            this._data.value.push(jsonData.value);
-            this._timestamp.value.push(jsonData.value);
+          case "data":
+            this._updatedChartData.datasets[0].data.push(jsonData.value);
+            this._updatedChartData.labels.push(jsonData.timestamp);
+            this._chartData.value = { ...this._updatedChartData };
             break;
 
           // recieve "isHost"
@@ -120,7 +159,7 @@ export class userClass {
           // recieve "notHost"
           case "notHost":
             if (jsonData.value) {
-              alert("ホストを譲りました。")
+              // alert("ホストを譲りました。")
               this._status.value = 1;
               this._hostExists.value = false;
               this._stopperConnection?.close();
@@ -130,7 +169,7 @@ export class userClass {
             }
             break;
         }
-        console.log(jsonData);
+        // console.log(jsonData);
       };
 
       // define WebSocket Close Event
@@ -162,6 +201,7 @@ export class userClass {
    */
   public run = () => {
     if ( this._status.value == 2) {
+      this.resetChartData();
       this._runConnection?.send('run');
     } else {
       console.log("コネクションが確立していません。");
