@@ -1,5 +1,6 @@
 <template>
-  <div id="connection-controller"/>
+  <div id="connection-controller1"/>
+  <div id="connection-controller2"/>
   <div class="controller">
     <WSController
       v-model:chartData="chartData"
@@ -11,7 +12,7 @@
       v-model:chartData="chartData"
     />
   </div>
-  <button id="debugger1" @click="debugger1">log timestamp</button>
+  <div id="connection-controller3"/>
 </template>
 
 <script setup lang="ts">
@@ -33,15 +34,8 @@ const WSController = defineAsyncComponent(
   () => import("./WSController.vue")
 );
 
-const debugger1 = () => {
-  console.log(chartData.value)
-}
 </script>
 
 <style scoped lang="scss">
 
-.chart {
-  // height: auto;
-  // width: 50vw;
-}
 </style>

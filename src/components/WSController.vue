@@ -1,5 +1,5 @@
 <template>
-  <teleport to="#connection-controller"> 
+  <teleport to="#connection-controller1"> 
     <div class="controller">
       <button 
         class="btn" id="connect"
@@ -17,38 +17,42 @@
       </button>
     </div>
   </teleport>
-  <div class="controller">
-    <button 
-      class="btn" id="behost"
-      @click="user.beHost"
-      :disabled="user.hostExists || user.status == 0 || user.isProcess"
-    >
-      Host
-    </button>
-    <button 
-      class="btn" id="beguest"
-      @click="user.beGuest"
-      :disabled="user.status == 0 || user.status == 3 || user.isProcess"
-    >
-      Guest
-    </button>
-  </div>
-  <div class="controller">
-    <button 
-      class="btn" id="run"
-      @click="user.run"
-      :disabled="user.status != 2 || user.isProcess"
-    >
-      run
-    </button>
-    <button 
-      class="btn" id="stop" 
-      @click="user.stop"
-      :disabled="user.status != 2 || !user.isProcess"
-    >
-      stop
-    </button>
-  </div>
+  <teleport to="#connection-controller2"> 
+    <div class="controller">
+      <button 
+        class="btn" id="behost"
+        @click="user.beHost"
+        :disabled="user.hostExists || user.status == 0 || user.isProcess"
+      >
+        Host
+      </button>
+      <button 
+        class="btn" id="beguest"
+        @click="user.beGuest"
+        :disabled="user.status == 0 || user.status == 3 || user.isProcess"
+      >
+        Guest
+      </button>
+    </div>
+  </teleport>
+  <teleport to="#connection-controller3"> 
+    <div class="controller">
+      <button 
+        class="btn" id="run"
+        @click="user.run"
+        :disabled="user.status != 2 || user.isProcess"
+      >
+        run
+      </button>
+      <button 
+        class="btn" id="stop" 
+        @click="user.stop"
+        :disabled="user.status != 2 || !user.isProcess"
+      >
+        stop
+      </button>
+    </div>
+  </teleport>
 </template>
 
 <script setup lang="ts">

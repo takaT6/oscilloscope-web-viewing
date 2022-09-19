@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts" >
-import { ObjectHTMLAttributes, PropType } from 'vue'
 import { Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -23,7 +22,6 @@ import {
   CategoryScale,
   Plugin,
   ChartData,
-  DefaultDataPoint
 } from 'chart.js'
 
 ChartJS.register(
@@ -47,7 +45,24 @@ const cssClasses = '';
 
 const chartOptions = {
   responsive: true,
-  maintainAspectRatio: false
+  maintainAspectRatio: false,
+  // Legend: {
+  //   display: false
+  // }
+  options: {
+  scales: {
+    yAxes: [{
+        ticks: {
+          max: 200
+        }
+    }],
+    xAxes: [{
+      ticks: {
+        maxTicksLimit: 20
+      }
+    }]
+  }
+  }
 }
     // return () =>
     //   h(Line, {

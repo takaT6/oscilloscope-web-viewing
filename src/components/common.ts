@@ -30,6 +30,7 @@ export class userClass {
 
   private _showLine = true;
   
+  private count = 0;
   /**
    * Constructor.
    */
@@ -122,7 +123,7 @@ export class userClass {
 
       // define WebSocket Event when catch messages
       this._runConnection.onmessage = (event) => {
-        const jsonData = JSON.parse(String(event.data));
+        const jsonData = JSON.parse(event.data);
 
         switch (jsonData.type) {
           case "data":
@@ -202,7 +203,14 @@ export class userClass {
   public run = () => {
     if ( this._status.value == 2) {
       this.resetChartData();
+
       this._runConnection?.send('run');
+      
+      setTimeout( () => {
+        console.log("stop")
+        this.stop()
+      },3000)
+
     } else {
       console.log("コネクションが確立していません。");
       console.log(this._status.value);
