@@ -34,6 +34,7 @@ ChartJS.register(
   CategoryScale
 )
 
+
 const props = defineProps({chartData: Object});
 const chartId = 'line-chart';
 const width = 400;
