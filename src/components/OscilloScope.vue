@@ -20,12 +20,12 @@ import LineChart from './LineChart.vue'
 import { ref, defineAsyncComponent } from "vue"
 
 var chartData = ref({
-  labels: [],
+  labels: [100],
   datasets: [
     {
       label: 'Data One',
       backgroundColor: '#f87979',
-      data: []
+      data: [100]
     }
   ]
 })

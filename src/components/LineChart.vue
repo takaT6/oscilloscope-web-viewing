@@ -10,6 +10,7 @@
 </template>
 
 <script setup lang="ts" >
+import { ref } from 'vue'
 import { Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,
@@ -22,6 +23,7 @@ import {
   CategoryScale,
   Plugin,
   ChartData,
+  ChartOptions
 } from 'chart.js'
 
 ChartJS.register(
@@ -31,7 +33,7 @@ ChartJS.register(
   LineElement,
   LinearScale,
   PointElement,
-  CategoryScale
+  CategoryScale,
 )
 
 
@@ -44,26 +46,33 @@ const cssClasses = '';
 // const styles: PropType<Partial<CSSStyleDeclaration>> = [];//Object as PropType<Partial<CSSStyleDeclaration>>
 // const plugins: PropType<Plugin<'line'>[]> = [];
 
-const chartOptions = {
+const chartOptions: ChartOptions<'line'> = {
   responsive: true,
   maintainAspectRatio: false,
-  // Legend: {
-  //   display: false
-  // }
-  options: {
-  scales: {
-    yAxes: [{
-        ticks: {
-          max: 200
+  // options: {
+    scales: {
+      // xAxes: [{
+      //   type: 'linear',
+      //         display: true,
+      //         gridLines: {
+      //           display: false,
+      //         }
+          
+      // }]
+      y: {
+        // min: -10,
+        max: 1,
+      },
+    },
+  // },
+  plugins: {
+    legend: {
+        display: true,
+        labels: {
+            color: 'rgb(255, 99, 132)'
         }
-    }],
-    xAxes: [{
-      ticks: {
-        maxTicksLimit: 20
       }
-    }]
-  }
-  }
+    },
 }
     // return () =>
     //   h(Line, {
@@ -76,6 +85,5 @@ const chartOptions = {
     //     styles: props.styles,
     //     plugins: props.plugins
     //   })
-
 
 </script>

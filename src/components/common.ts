@@ -1,5 +1,6 @@
 export const Const = {
   WS_ADDRESS: "ws://localhost:8088/echo",
+  // WS_ADDRESS: "ws://192.168.11.2:8088/echo",
 }
 
 export interface ChartDataInterface{
@@ -206,10 +207,10 @@ export class userClass {
 
       this._runConnection?.send('run');
       
-      setTimeout( () => {
-        console.log("stop")
-        this.stop()
-      },3000)
+      // setTimeout( () => {
+      //   console.log("stop")
+      //   this.stop()
+      // },3000)
 
     } else {
       console.log("コネクションが確立していません。");
