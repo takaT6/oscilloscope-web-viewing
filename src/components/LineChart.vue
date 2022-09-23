@@ -7,6 +7,13 @@
     :width="width"
     :height="height"
   />
+  <UplotVue
+        :data="data"
+        :options="options"
+        :target="target"
+        @create="onCreate"
+        @delete="onDelete"
+    />
 </template>
 
 <script setup lang="ts" >
@@ -67,7 +74,7 @@ const chartOptions: ChartOptions<'line'> = {
       //   min: 50,
       //   max: 100,
       // }
-      
+
     },
   // },
   plugins: {
@@ -79,16 +86,8 @@ const chartOptions: ChartOptions<'line'> = {
       }
     },
 }
-    // return () =>
-    //   h(Line, {
-    //     chartData,
-    //     chartOptions,
-    //     chartId: props.chartId,
-    //     width: props.width,
-    //     height: props.height,
-    //     cssClasses: props.cssClasses,
-    //     styles: props.styles,
-    //     plugins: props.plugins
-    //   })
+
+import uPlot from 'uplot';
+import UplotVue from 'uplot-vue';
 
 </script>
