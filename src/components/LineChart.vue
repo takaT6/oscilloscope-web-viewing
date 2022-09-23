@@ -60,9 +60,14 @@ const chartOptions: ChartOptions<'line'> = {
           
       // }]
       y: {
-        // min: -10,
-        max: 1,
+        min: -2,
+        max: 2,
       },
+      // x: {
+      //   min: 50,
+      //   max: 100,
+      // }
+      
     },
   // },
   plugins: {
