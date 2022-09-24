@@ -47,7 +47,9 @@ export class userClass {
   }
 
   private resetChartData = () => {
-    this._uplotData = [[0],[0]];
+    this._uplotData = [[0,0,0],[0,0,0]];
+    this.start = 0;
+    this.length = 100;
   }
 
   // getter
@@ -69,6 +71,9 @@ export class userClass {
   get uplotData() :number[][] {
     return this._uplotData
   }
+
+  public start = 0;
+  public length = -100;
 
   /**
    * Connect with WebSocket server.
@@ -99,13 +104,19 @@ export class userClass {
       this._runConnection.onmessage = (event) => {
         const jsonData = JSON.parse(event.data);
         switch (jsonData.type) {
-          case "data":
+          case "data": {
+            this.start += 1;
+
+            this._uplotData[0] = this._uplotData[0].slice(this.length);
+            this._uplotData[1] = this._uplotData[1].slice(this.length);
+
             this._uplotData = [
               [...this._uplotData[0], jsonData.timestamp], 
               [...this._uplotData[1], jsonData.value]
             ]
             this.isDataUpdated.value = {1: 1}
             break;
+          }
 
           // recieve "isHost"
           case "isHost": 

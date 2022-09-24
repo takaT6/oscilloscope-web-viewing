@@ -66,9 +66,10 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:uplotData']);
-
+let data = []
 watch(user.isDataUpdated, () => {
   emit('update:uplotData', user.uplotData);
+  console.log(data = user.uplotData[0].slice(0,3))
 });
 
 </script>
