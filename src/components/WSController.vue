@@ -72,12 +72,15 @@ const emit = defineEmits(['update:uplotData']);
 //   // console.log(data = user.uplotData[0].slice(0,3))
 // });
 
+let intervalId = 0;
 const updateData = () => {
-  setInterval(()=> {
+  clearInterval(intervalId);
+  intervalId = setInterval(()=> {
     // if(user.isProcess){
       emit('update:uplotData', user.uplotData);
+      // console.log('updated')
     // }
-  },500)
+  },10)
 }
 
 </script>

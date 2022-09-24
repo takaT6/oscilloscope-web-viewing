@@ -192,10 +192,10 @@ export class userClass {
 
       this._runConnection?.send('run');
       
-      setTimeout( () => {
-        console.log("stop")
-        this.stop()
-      },3000)
+      // setTimeout( () => {
+      //   console.log("stop")
+      //   this.stop()
+      // },3000)
 
     } else {
       console.log("コネクションが確立していません。");
