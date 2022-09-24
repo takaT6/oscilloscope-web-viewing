@@ -20,18 +20,38 @@ const uplotOptions = {
   title: "mV",
   width: 1000,
   height: 300,
+	pxAlign: false,
+  cursor: {
+    drag: {
+      setScale: false,
+    }
+  },
   series: [
     {
-      label: "time",
+      label: "時間(m)",
     },
     {
       label: "mV",
       points: { show: false },
-      stroke: "#00437a",
+      stroke: "green",
       // fill: "#00437a22",
     },
   ],
-  scales: { x: { time: false } },
+  scales: {
+    x: {
+      time: false,
+    },
+    y: {
+      auto: false,
+      range: [-5, 5],
+    }
+  },
+  axes:[
+    {
+      // grid: {show: true},
+      space: 300,
+    }
+  ],
 };
 
 

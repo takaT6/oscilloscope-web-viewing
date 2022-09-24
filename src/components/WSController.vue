@@ -1,15 +1,15 @@
 <template>
-  <teleport to="#connection-controller1"> 
+  <teleport to="#connection-controller1">
     <div class="controller">
-      <button 
+      <button
         class="btn" id="connect"
         @click="user.connect"
         :disabled="user.status >= 1"
       >
         Connect
       </button>
-      <button 
-        class="btn" id="disconnect" 
+      <button
+        class="btn" id="disconnect"
         @click="user.disconnect"
         :disabled="user.status == 0 || user.isProcess"
         >
@@ -17,16 +17,16 @@
       </button>
     </div>
   </teleport>
-  <teleport to="#connection-controller2"> 
+  <teleport to="#connection-controller2">
     <div class="controller">
-      <button 
+      <button
         class="btn" id="behost"
         @click="user.beHost"
         :disabled="user.hostExists || user.status == 0 || user.isProcess"
       >
         Host
       </button>
-      <button 
+      <button
         class="btn" id="beguest"
         @click="user.beGuest"
         :disabled="user.status == 0 || user.status == 3 || user.isProcess"
@@ -35,17 +35,17 @@
       </button>
     </div>
   </teleport>
-  <teleport to="#connection-controller3"> 
+  <teleport to="#connection-controller3">
     <div class="controller">
-      <button 
+      <button
         class="btn" id="run"
         @click="user.run(); updateData()"
         :disabled="user.status != 2 || user.isProcess"
       >
         run
       </button>
-      <button 
-        class="btn" id="stop" 
+      <button
+        class="btn" id="stop"
         @click="user.stop"
         :disabled="user.status != 2 || !user.isProcess"
       >
@@ -72,17 +72,39 @@ const emit = defineEmits(['update:uplotData']);
 //   // console.log(data = user.uplotData[0].slice(0,3))
 // });
 
+const sliceData = (data: number[][]) => {
+  let d = [];
+  for (let i = 0; i < data.length; i++)
+    d.push(data[i].slice(-5000));
+    // d.push(data[i].slice(start, end));
+  return d;
+}
+
+let start1 = 0;
+let len1 = 3000;
+
 let intervalId = 0;
+let count = 0;  
+
+const setData = () => {
+  let data = [...user.uplotData];
+  let data1 = sliceData(data);
+  emit('update:uplotData', data1);
+}
 const updateData = () => {
   clearInterval(intervalId);
   intervalId = setInterval(()=> {
-    // if(user.isProcess){
-      emit('update:uplotData', user.uplotData);
-      // console.log('updated')
-    // }
-  },10)
+    // setData()
+    emit('update:uplotData', user.uplotData);
+  },100);
+  // count++;
+  // if(count < 1000) {
+  // count = 0;  
+  // setData();
+  // emit('update:uplotData', user.uplotData);
+  // requestAnimationFrame(updateData);
+  // }
 }
-
 </script>
 
 <style scoped lang="scss">

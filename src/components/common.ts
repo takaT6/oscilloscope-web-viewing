@@ -17,11 +17,11 @@ export class userClass {
 
   // WebSocket Instance for stopping measurement.
   private _stopperConnection?: WebSocket;
-  
-  // 0: unconected, 1: connected, 2: host, 3: guest 
+
+  // 0: unconected, 1: connected, 2: host, 3: guest
   private _status: Ref<number>;
 
-  // 0: unconnected, 1: connected 
+  // 0: unconnected, 1: connected
   private _stopperStatus: number;
 
   // 0: unprocessing, 1: processing
@@ -29,9 +29,6 @@ export class userClass {
 
   // Datasets for LineChart.
   private _uplotData: number[][];
-
-  // Flag for noticing that data was updated.
-  public isDataUpdated = ref({1:0});
 
   /**
    * Constructor.
@@ -48,7 +45,11 @@ export class userClass {
 
   public count = 0;
   private resetChartData = () => {
-    this._uplotData = [[...new Array(10000)].map((_, i) => 0),[...new Array(10000)].map((_, i) => 0)];//[[0,0,0],[0,0,0]];
+    this._uplotData = [
+      [...new Array(5000)].map((_, i) => 0),
+      [...new Array(5000)].map((_, i) => 0)
+    ];
+    // this._uplotData = [[],[]];
     this.count = 0;
   }
 
@@ -91,7 +92,7 @@ export class userClass {
         this.checkServer();
         console.log("Connection is published!!!");
       };
-      
+
       // define WebSocket Error Event
       this._runConnection.onerror = () => {
         console.log('エラーが発生しました。');
@@ -104,15 +105,14 @@ export class userClass {
         switch (jsonData.type) {
           case "data": {
 
-            this._uplotData[0].shift(); //= this._uplotData[0].slice(this.length);
-            this._uplotData[1].shift(); //= this._uplotData[1].slice(this.length);
+            this._uplotData[0].shift();
+            this._uplotData[1].shift();
 
             this._uplotData = [
-              [...this._uplotData[0], jsonData.timestamp], 
+              [...this._uplotData[0], jsonData.timestamp],
               [...this._uplotData[1], jsonData.value]
             ]
 
-            this.isDataUpdated.value = {1: 1}
             break;
           }
 
@@ -191,11 +191,11 @@ export class userClass {
       this.resetChartData();
 
       this._runConnection?.send('run');
-      
-      // setTimeout( () => {
-      //   console.log("stop")
-      //   this.stop()
-      // },3000)
+
+      setTimeout( () => {
+        console.log("stop")
+        this.stop()
+      },3000)
 
     } else {
       console.log("コネクションが確立していません。");
@@ -221,7 +221,7 @@ export class userClass {
 
   /**
    * Send "checkServer" message to WS server.
-   * WS server will return server status of "hostExists" and "isProcess". 
+   * WS server will return server status of "hostExists" and "isProcess".
    * @public
    */
   public checkServer = () => {
@@ -236,11 +236,11 @@ export class userClass {
 
   /**
    * Send "beHost" message to WS server.
-   * If there is no host, WS server will return "isHost"=ture and "hostExists"=true . 
+   * If there is no host, WS server will return "isHost"=ture and "hostExists"=true .
    * @public
    */
   public beHost = (): void => {
-    if ( (this._status.value == 1 || this._status.value == 3) && !this._hostExists.value) {// 1:connected, 3:guest 
+    if ( (this._status.value == 1 || this._status.value == 3) && !this._hostExists.value) {// 1:connected, 3:guest
       this._runConnection?.send('beHost');
     } else {
       console.log("コネクションが確立していません。");
@@ -250,7 +250,7 @@ export class userClass {
 
   /**
    * Send "beGuest" message to WS server.
-   * Whatever there is a host, WS server will return "isGuest"=true . 
+   * Whatever there is a host, WS server will return "isGuest"=true .
    * @public
    */
   public beGuest = (): void => {
@@ -260,7 +260,7 @@ export class userClass {
       this._runConnection?.send('resignHost');
       // this._runConnection?.send('beGuest');
       // setTimeout(() => this._runConnection?.send('beGuest'),1000);
-        
+
     } else {
       console.log("コネクションが確立していません。");
       console.log(this._status.value);
