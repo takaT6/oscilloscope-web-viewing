@@ -57,16 +57,18 @@
 
 <script setup lang="ts">
 import { userClass } from "./common"
-import { watch } from 'vue';
+import { watch } from 'vue'
+
 const user = new userClass();
 
-const props = defineProps({chartData: Object});
+const props = defineProps({
+  uplotData: Array
+});
 
-const emit = defineEmits(['update:chartData']);
+const emit = defineEmits(['update:uplotData']);
 
-watch(user.chartData, () => {
-  emit('update:chartData', user.chartData.value);
-  console.log("hoge")
+watch(user.isDataUpdated, () => {
+  emit('update:uplotData', user.uplotData);
 });
 
 </script>

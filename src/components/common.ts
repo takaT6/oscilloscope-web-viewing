@@ -3,35 +3,36 @@ export const Const = {
   // WS_ADDRESS: "ws://192.168.11.2:8088/echo",
 }
 
-export interface ChartDataInterface{
-  labels: Array<number>,
-  datasets: Array<{
-    label: string,
-    backgroundColor: string,
-    data: Array<number>,
-    showLine: boolean,
-    animation:boolean,
-  }>
-}
-
 /**
  * UserClass
  */
 import { ref, Ref } from 'vue';
 export class userClass {
-  private _runConnection?: WebSocket; // WebSocket
-  private _status: Ref<number>; // 0: 未コネ, 1: connected, 2: host, 3: guest 
-  private _hostExists: Ref<boolean>; // ホストが存在するかどうか
-  private _stopperConnection?: WebSocket; // 停止用WebSocket
-  private _stopperStatus: number; // 0: 未コネ, 1: connected 
+
+  // WebSocket Instance for publishing connection and running measurement.
+  private _runConnection?: WebSocket;
+
+  // Host dose exists.
+  private _hostExists: Ref<boolean>;
+
+  // WebSocket Instance for stopping measurement.
+  private _stopperConnection?: WebSocket;
+  
+  // 0: unconected, 1: connected, 2: host, 3: guest 
+  private _status: Ref<number>;
+
+  // 0: unconnected, 1: connected 
+  private _stopperStatus: number;
+
+  // 0: unprocessing, 1: processing
   private _isProcess: Ref<boolean>;
 
-  private _chartData: Ref<ChartDataInterface>;
-  private _updatedChartData: ChartDataInterface;
+  // Datasets for LineChart.
+  private _uplotData: number[][];
 
-  private _showLine = true;
-  
-  private count = 0;
+  // Flag for noticing that data was updated.
+  public isDataUpdated = ref({1:0});
+
   /**
    * Constructor.
    */
@@ -42,39 +43,11 @@ export class userClass {
     this._stopperStatus = 0;
     this._hostExists = ref(true);
     this._isProcess = ref(false);
-    this._chartData = ref({
-      labels: [],
-      datasets: [{
-        label: 'Data One',
-        backgroundColor: 'f87979',
-        data: [],
-        showLine: this._showLine,
-        animation:false,
-      }]
-    });
-    this._updatedChartData = {
-      labels: [],
-      datasets: [{
-        label: 'Data One',
-        backgroundColor: 'f87979',
-        data: [],
-        showLine: this._showLine,
-        animation:false,
-      }]
-    }
+    this._uplotData = [[0], [0]];
   }
 
   private resetChartData = () => {
-    this._updatedChartData = {
-      labels: [],
-      datasets: [{
-        label: 'Data One',
-        backgroundColor: 'f87979',
-        data: [],
-        showLine: this._showLine,
-        animation:false,
-      }]
-    }
+    this._uplotData = [[0],[0]];
   }
 
   // getter
@@ -93,8 +66,8 @@ export class userClass {
   }
 
   // getter
-  get chartData() {
-    return this._chartData;
+  get uplotData() :number[][] {
+    return this._uplotData
   }
 
   /**
@@ -125,12 +98,13 @@ export class userClass {
       // define WebSocket Event when catch messages
       this._runConnection.onmessage = (event) => {
         const jsonData = JSON.parse(event.data);
-
         switch (jsonData.type) {
           case "data":
-            this._updatedChartData.datasets[0].data.push(jsonData.value);
-            this._updatedChartData.labels.push(jsonData.timestamp);
-            this._chartData.value = { ...this._updatedChartData };
+            this._uplotData = [
+              [...this._uplotData[0], jsonData.timestamp], 
+              [...this._uplotData[1], jsonData.value]
+            ]
+            this.isDataUpdated.value = {1: 1}
             break;
 
           // recieve "isHost"
@@ -155,6 +129,7 @@ export class userClass {
           // recieve "isProcess"
           case "isProcess":
             this._isProcess.value = jsonData.value; // T or F
+            console.log(this._uplotData[0].length)
             // this._isProcess.value ? alert("計測中です。"): alert("計測中ではありません。");
             break;
 
@@ -207,10 +182,10 @@ export class userClass {
 
       this._runConnection?.send('run');
       
-      // setTimeout( () => {
-      //   console.log("stop")
-      //   this.stop()
-      // },3000)
+      setTimeout( () => {
+        console.log("stop")
+        this.stop()
+      },3000)
 
     } else {
       console.log("コネクションが確立していません。");

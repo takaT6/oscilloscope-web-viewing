@@ -1,93 +1,38 @@
 <template>
-  <Line
-    :chart-options="chartOptions"
-    :chart-data="(props.chartData as ChartData<'line'>)"
-    :chart-id="chartId"
-    :css-classes="cssClasses"
-    :width="width"
-    :height="height"
-  />
-  <UplotVue
-        :data="data"
-        :options="options"
-        :target="target"
-        @create="onCreate"
-        @delete="onDelete"
+  <div>
+    <UplotVue
+      :data="props.uplotData"
+      :options="uplotOptions"
     />
+  </div>
 </template>
 
 <script setup lang="ts" >
-import { ref } from 'vue'
-import { Line } from 'vue-chartjs'
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  CategoryScale,
-  Plugin,
-  ChartData,
-  ChartOptions
-} from 'chart.js'
-
-ChartJS.register(
-  Title,
-  Tooltip,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  CategoryScale,
-)
-
-
-const props = defineProps({chartData: Object});
-const chartId = 'line-chart';
-const width = 400;
-const height = 400;
-const cssClasses = '';
-
-// const styles: PropType<Partial<CSSStyleDeclaration>> = [];//Object as PropType<Partial<CSSStyleDeclaration>>
-// const plugins: PropType<Plugin<'line'>[]> = [];
-
-const chartOptions: ChartOptions<'line'> = {
-  responsive: true,
-  maintainAspectRatio: false,
-  // options: {
-    scales: {
-      // xAxes: [{
-      //   type: 'linear',
-      //         display: true,
-      //         gridLines: {
-      //           display: false,
-      //         }
-          
-      // }]
-      y: {
-        min: -2,
-        max: 2,
-      },
-      // x: {
-      //   min: 50,
-      //   max: 100,
-      // }
-
-    },
-  // },
-  plugins: {
-    legend: {
-        display: true,
-        labels: {
-            color: 'rgb(255, 99, 132)'
-        }
-      }
-    },
-}
-
-import uPlot from 'uplot';
+import "../../node_modules/uplot/dist/uPlot.min.css";
 import UplotVue from 'uplot-vue';
+
+
+const props = defineProps({
+  uplotData: Array
+});
+
+const uplotOptions = {
+  title: "mV",
+  width: 1000,
+  height: 300,
+  series: [
+    {
+      label: "time",
+    },
+    {
+      label: "mV",
+      points: { show: false },
+      stroke: "#00437a",
+      fill: "#00437a22",
+    },
+  ],
+  scales: { x: { time: false } },
+};
+
 
 </script>

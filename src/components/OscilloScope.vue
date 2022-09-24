@@ -3,13 +3,13 @@
   <div id="connection-controller2"/>
   <div class="controller">
     <WSController
-      v-model:chartData="chartData"
+      v-model:uplotData="uplotData"
     />
   </div>
   <div class="chart">
     oscilloscope
     <LineChart
-      v-model:chartData="chartData"
+      v-model:uplotData="uplotData"
     />
   </div>
   <div id="connection-controller3"/>
@@ -19,20 +19,12 @@
 import LineChart from './LineChart.vue'
 import { ref, defineAsyncComponent } from "vue"
 
-var chartData = ref({
-  labels: [100],
-  datasets: [
-    {
-      label: 'Data One',
-      backgroundColor: '#f87979',
-      data: [100]
-    }
-  ]
-})
 // Lazy loading
 const WSController = defineAsyncComponent(
   () => import("./WSController.vue")
 );
+
+var uplotData = ref([[], []]);
 
 </script>
 
