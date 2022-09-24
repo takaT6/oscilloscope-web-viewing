@@ -28,7 +28,7 @@ const uplotOptions = {
       label: "mV",
       points: { show: false },
       stroke: "#00437a",
-      fill: "#00437a22",
+      // fill: "#00437a22",
     },
   ],
   scales: { x: { time: false } },

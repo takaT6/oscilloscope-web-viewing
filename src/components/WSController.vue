@@ -39,7 +39,7 @@
     <div class="controller">
       <button 
         class="btn" id="run"
-        @click="user.run"
+        @click="user.run(); updateData()"
         :disabled="user.status != 2 || user.isProcess"
       >
         run
@@ -66,11 +66,19 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update:uplotData']);
-let data = []
-watch(user.isDataUpdated, () => {
-  emit('update:uplotData', user.uplotData);
-  console.log(data = user.uplotData[0].slice(0,3))
-});
+
+// watch(user.isDataUpdated, () => {
+//   emit('update:uplotData', user.uplotData);
+//   // console.log(data = user.uplotData[0].slice(0,3))
+// });
+
+const updateData = () => {
+  setInterval(()=> {
+    // if(user.isProcess){
+      emit('update:uplotData', user.uplotData);
+    // }
+  },500)
+}
 
 </script>
 

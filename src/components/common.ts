@@ -46,10 +46,10 @@ export class userClass {
     this._uplotData = [[0], [0]];
   }
 
+  public count = 0;
   private resetChartData = () => {
-    this._uplotData = [[0,0,0],[0,0,0]];
-    this.start = 0;
-    this.length = 100;
+    this._uplotData = [[...new Array(10000)].map((_, i) => 0),[...new Array(10000)].map((_, i) => 0)];//[[0,0,0],[0,0,0]];
+    this.count = 0;
   }
 
   // getter
@@ -71,9 +71,6 @@ export class userClass {
   get uplotData() :number[][] {
     return this._uplotData
   }
-
-  public start = 0;
-  public length = -100;
 
   /**
    * Connect with WebSocket server.
@@ -103,49 +100,50 @@ export class userClass {
       // define WebSocket Event when catch messages
       this._runConnection.onmessage = (event) => {
         const jsonData = JSON.parse(event.data);
+        this.count++;
         switch (jsonData.type) {
           case "data": {
-            this.start += 1;
 
-            this._uplotData[0] = this._uplotData[0].slice(this.length);
-            this._uplotData[1] = this._uplotData[1].slice(this.length);
+            this._uplotData[0].shift(); //= this._uplotData[0].slice(this.length);
+            this._uplotData[1].shift(); //= this._uplotData[1].slice(this.length);
 
             this._uplotData = [
               [...this._uplotData[0], jsonData.timestamp], 
               [...this._uplotData[1], jsonData.value]
             ]
+
             this.isDataUpdated.value = {1: 1}
             break;
           }
 
           // recieve "isHost"
-          case "isHost": 
+          case "isHost": {
             this._status.value = jsonData.value ? 2 : 1; // 2:host or 1:connected
             this.makeStopper();
-            // alert("あなたはホストになりました。");
             break;
+          }
 
           // recieve "isGuest"
-          case "isGuest": 
+          case "isGuest": {
             this._status.value = jsonData.value ? 3 : 1; // 3:guest or 1:connected
-            // alert("あなたはguestになりました。");
             break;
+          }
 
           // recieve "hostExists"
-          case "hostExists":
+          case "hostExists": {
             this._hostExists.value = jsonData.value; // T or F
-            // this._hostExists.value ? alert("ホストは存在します。"): alert("ホストはまだいません。");
             break;
+          }
 
           // recieve "isProcess"
-          case "isProcess":
+          case "isProcess": {
             this._isProcess.value = jsonData.value; // T or F
-            console.log(this._uplotData[0].length)
-            // this._isProcess.value ? alert("計測中です。"): alert("計測中ではありません。");
+            console.log(this.count)
             break;
+          }
 
           // recieve "notHost"
-          case "notHost":
+          case "notHost": {
             if (jsonData.value) {
               // alert("ホストを譲りました。")
               this._status.value = 1;
@@ -156,16 +154,17 @@ export class userClass {
                 alert('再起動してください');
             }
             break;
+          }
         }
-        // console.log(jsonData);
       };
 
       // define WebSocket Close Event
       this._runConnection.onclose = () => {
-        this._status.value = 0; // 未コネ
+        this._status.value = 0; // unconnected
         this.stopperDisconnect();
         console.log("Connection is down!!!");
       };
+
       return true;
     } else {
       console.log('WebSocket NOT supported in this browser');
