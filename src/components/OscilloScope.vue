@@ -1,11 +1,6 @@
 <template>
   <div id="connection-controller1"/>
   <div id="connection-controller2"/>
-  <div class="controller">
-    <WSController
-      v-model:uplotData="uplotData"
-    />
-  </div>
   <div class="chart">
     oscilloscope
     <LineChart
@@ -13,6 +8,9 @@
     />
   </div>
   <div id="connection-controller3"/>
+  <WSController
+      v-model:uplotData="uplotData"
+  />
 </template>
 
 <script setup lang="ts">

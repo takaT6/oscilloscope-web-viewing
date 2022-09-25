@@ -20,7 +20,6 @@ const uplotOptions = {
   title: "mV",
   width: 1000,
   height: 300,
-	pxAlign: false,
   cursor: {
     drag: {
       setScale: false,
@@ -48,8 +47,12 @@ const uplotOptions = {
   },
   axes:[
     {
-      // grid: {show: true},
+      grid: {show: true},
       space: 300,
+      // show: false
+    },
+    {
+      show: true
     }
   ],
 };
