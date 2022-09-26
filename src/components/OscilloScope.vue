@@ -5,11 +5,13 @@
     oscilloscope
     <LineChart
       v-model:uplotData="uplotData"
+      v-model:plotlyData="plotlyData"
     />
   </div>
   <div id="connection-controller3"/>
   <WSController
       v-model:uplotData="uplotData"
+      v-model:plotlyData="plotlyData"
   />
 </template>
 
@@ -23,7 +25,7 @@ const WSController = defineAsyncComponent(
 );
 
 var uplotData = ref([[], []]);
-
+var plotlyData = ref({})
 </script>
 
 <style scoped lang="scss">
