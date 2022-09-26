@@ -53,15 +53,13 @@
       </button>
     </div>
   </teleport>
-
-  <div id="graph"></div>
 </template>
 
 <script setup lang="ts">
 import { userClass } from "./common"
 import { watch } from 'vue'
 
-import Plotly from 'plotly.js-dist-min'
+import Plotly from 'plotly.js'
 import { onMounted } from "vue";
 
 onMounted(()=> {
@@ -71,6 +69,10 @@ onMounted(()=> {
     // "width": 600, "height": 400
   }])
 });
+
+var layout_update = {
+    title: 'some new title', // updates the title
+};
 
 let intervalId = 0;
 const updateData = () => {
@@ -82,7 +84,7 @@ const updateData = () => {
       x: [[...user.uplotData[0]]],
       y: [[...user.uplotData[1]]]
     }
-    Plotly.update('graph', newData)
+    Plotly.update('graph', newData, layout_update);
   // },100);
   requestAnimationFrame(updateData);
 }

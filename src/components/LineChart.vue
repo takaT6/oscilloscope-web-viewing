@@ -1,16 +1,8 @@
 <template>
-  <div>
-    <!-- <UplotVue
-      :data="props.uplotData"
-      :options="uplotOptions"
-    /> -->
-  </div>
-  <!-- <div id="graph"></div> -->
+  <div id="graph"></div>
 </template>
 
 <script setup lang="ts" >
-import "../../node_modules/uplot/dist/uPlot.min.css";
-import UplotVue from 'uplot-vue';
 
 // import Plotly from 'plotly.js-dist-min'
 // import { onMounted } from "vue";
