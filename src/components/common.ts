@@ -28,7 +28,7 @@ export class userClass {
   private _isProcess: Ref<boolean>;
 
   // Datasets for LineChart.
-  private _uplotData: number[][];
+  private _plotlyData: number[][];
 
   /**
    * Constructor.
@@ -40,16 +40,16 @@ export class userClass {
     this._stopperStatus = 0;
     this._hostExists = ref(true);
     this._isProcess = ref(false);
-    this._uplotData = [[0], [0]];
+    this._plotlyData = [[0], [0]];
   }
 
   public count = 0;
   private resetChartData = () => {
-    this._uplotData = [
-      [...new Array(5000)].map((_, i) => 0),
-      [...new Array(5000)].map((_, i) => 0)
-    ];
-    // this._uplotData = [[],[]];
+    // this._plotlyData = [
+    //   [...new Array(5000)].map((_, i) => 0),
+    //   [...new Array(5000)].map((_, i) => 0)
+    // ];
+    this._plotlyData = [[],[]];
     this.count = 0;
   }
 
@@ -69,8 +69,8 @@ export class userClass {
   }
 
   // getter
-  get uplotData() :number[][] {
-    return this._uplotData
+  get plotlyData() :number[][] {
+    return this._plotlyData
   }
 
   /**
@@ -105,12 +105,12 @@ export class userClass {
         switch (jsonData.type) {
           case "data": {
 
-            this._uplotData[0].shift();
-            this._uplotData[1].shift();
+            // this._plotlyData[0].shift();
+            // this._plotlyData[1].shift();
 
-            this._uplotData = [
-              [...this._uplotData[0], jsonData.timestamp],
-              [...this._uplotData[1], jsonData.value]
+            this._plotlyData = [
+              [...this._plotlyData[0], jsonData.timestamp],
+              [...this._plotlyData[1], jsonData.value]
             ]
 
             break;
