@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "plotly.js-dist-min": "^2.14.0",
-    "uplot-vue": "^1.1.1",
     "vue": "^3.2.13",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.3"
