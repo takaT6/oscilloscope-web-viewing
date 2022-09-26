@@ -195,7 +195,7 @@ export class userClass {
       setTimeout( () => {
         console.log("stop")
         this.stop()
-      },3000)
+      },10000)
 
     } else {
       console.log("コネクションが確立していません。");

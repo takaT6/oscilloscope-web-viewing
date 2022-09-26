@@ -53,19 +53,48 @@
       </button>
     </div>
   </teleport>
+
+  <div id="graph"></div>
 </template>
 
 <script setup lang="ts">
 import { userClass } from "./common"
 import { watch } from 'vue'
 
+import Plotly from 'plotly.js-dist-min'
+import { onMounted } from "vue";
+
+onMounted(()=> {
+  Plotly.newPlot("graph",[{ 
+    // x: [],
+    y: [1,2,3],
+    // "width": 600, "height": 400
+  }])
+});
+
+let intervalId = 0;
+const updateData = () => {
+  // clearInterval(intervalId);
+  // intervalId = setInterval(()=> {
+    // Plotly.update('graph', props.plotlyData)
+    // console.log(props.plotlyData)
+    let newData = {
+      x: [[...user.uplotData[0]]],
+      y: [[...user.uplotData[1]]]
+    }
+    Plotly.update('graph', newData)
+  // },100);
+  requestAnimationFrame(updateData);
+}
+
 const user = new userClass();
 
 const props = defineProps({
-  uplotData: Array
+  uplotData: Array,
+  plotlyData: Object
 });
 
-const emit = defineEmits(['update:uplotData']);
+const emit = defineEmits(['update:uplotData', 'update:plotlyData']);
 
 // watch(user.isDataUpdated, () => {
 //   emit('update:uplotData', user.uplotData);
@@ -80,31 +109,37 @@ const sliceData = (data: number[][]) => {
   return d;
 }
 
-let start1 = 0;
-let len1 = 3000;
+// let start1 = 0;
+// let len1 = 3000;
 
-let intervalId = 0;
-let count = 0;  
+// let intervalId = 0;
+// let count = 0;  
 
-const setData = () => {
-  let data = [...user.uplotData];
-  let data1 = sliceData(data);
-  emit('update:uplotData', data1);
-}
-const updateData = () => {
-  clearInterval(intervalId);
-  intervalId = setInterval(()=> {
-    // setData()
-    emit('update:uplotData', user.uplotData);
-  },100);
-  // count++;
-  // if(count < 1000) {
-  // count = 0;  
-  // setData();
-  // emit('update:uplotData', user.uplotData);
-  // requestAnimationFrame(updateData);
-  // }
-}
+// const setData = () => {
+//   let data = [...user.uplotData];
+//   let data1 = sliceData(data);
+//   emit('update:uplotData', data1);
+// }
+// const updateData = () => {
+//   clearInterval(intervalId);
+//   intervalId = setInterval(()=> {
+//     // // setData()
+//     // emit('update:uplotData', user.uplotData);
+//     let newData = {
+//       x: [[...user.uplotData[0]]],
+//       y: [[...user.uplotData[1]]]
+//     }
+//     emit('update:plotlyData', newData);
+      
+//   },100);
+//   // count++;
+//   // if(count < 1000) {
+//   // count = 0;  
+//   // setData();
+//   // emit('update:uplotData', user.uplotData);
+//   // requestAnimationFrame(updateData);
+//   // }
+// }
 </script>
 
 <style scoped lang="scss">
