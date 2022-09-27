@@ -57,77 +57,19 @@
 
 <script setup lang="ts">
 import { userClass } from "./common"
-import Plotly from 'plotly.js-dist-min'
-import { onMounted, watch } from "vue";
-
-var config = {
-  // Hide the Plotly Logo on the Modebar
-  displaylogo: false,
-  // Making a Responsive Chart
-  responsive: true
-};
-
-onMounted(()=> {
-  Plotly.newPlot(
-    "graph",
-    [{ 
-      x: [],
-      y: [],
-      mode: "lines",
-    }],
-    {
-      showlegend: false
-    },
-    config
-  );
-});
-
-var layout_update = {
-    title: 'some new title', // updates the title
-};
-
-let intervalId = 0;
-const updateData = () => {
-  clearInterval(intervalId);
-  intervalId = setInterval(()=> {
-    let rowData = [...user.plotlyData]
-    let newData = {
-      x: [rowData[0]],
-      y: [rowData[1]]
-    }
-    let lastTimeStamp = rowData[0].slice(-1)[0];
-    let minuteView = {
-      xaxis: {
-        range: [lastTimeStamp-10, lastTimeStamp]
-      }
-    };
-
-    Plotly.update('graph', newData, layout_update);
-    // Plotly.prependTraces('graph', newData, [0])
-    // Plotly.relayout('graph', minuteView as Partial<Plotly.Layout>);
-  },100);
-  // requestAnimationFrame(updateData);
-}
+import { watch } from "vue";
 
 const user = new userClass();
 
-const props = defineProps({
-  plotlyData: Object
-});
+const props = defineProps<{
+  plotlyData: number[][]
+}>();
 
 const emit = defineEmits(['update:plotlyData']);
 
-// watch(user.isDataUpdated, () => {
-//   emit('update:plotlyData', user.plotlyData);
-// });
-
-const sliceData = (data: number[][]) => {
-  let d = [];
-  for (let i = 0; i < data.length; i++)
-    d.push(data[i].slice(-5000));
-    // d.push(data[i].slice(start, end));
-  return d;
-}
+watch(user.isDataUpdated, () => {
+  emit('update:plotlyData', user.plotlyData);
+});
 
 </script>
 

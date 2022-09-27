@@ -30,6 +30,8 @@ export class userClass {
   // Datasets for LineChart.
   private _plotlyData: number[][];
 
+  public isDataUpdated = ref(false);
+
   /**
    * Constructor.
    */
@@ -79,9 +81,7 @@ export class userClass {
    */
   public connect = (): boolean => {
     if ('WebSocket' in window) {
-      if (this._runConnection != undefined) {
-        this.disconnect();
-      }
+      if (this._runConnection != undefined) this.disconnect();
 
       // create a WebSocket Object
       this._runConnection = new WebSocket(Const.WS_ADDRESS);
@@ -112,6 +112,8 @@ export class userClass {
               [...this._plotlyData[0], jsonData.timestamp],
               [...this._plotlyData[1], jsonData.value]
             ]
+
+            this.isDataUpdated.value = true;
 
             break;
           }
@@ -155,6 +157,8 @@ export class userClass {
             }
             break;
           }
+
+          default: // nothing to do.
         }
       };
 
@@ -187,7 +191,7 @@ export class userClass {
    * @public
    */
   public run = () => {
-    if ( this._status.value == 2) {
+    if ( this._status.value === 2) {
       this.resetChartData();
 
       this._runConnection?.send('run');
@@ -197,10 +201,7 @@ export class userClass {
       //   this.stop()
       // },10000)
 
-    } else {
-      console.log("コネクションが確立していません。");
-      console.log(this._status.value);
-    }
+    }else {/*do something*/}
   }
 
   /**
@@ -209,10 +210,10 @@ export class userClass {
    * @public
    */
   public stop = (): void => {
-    if (this._status.value == 2) {
-      if (this._stopperStatus == 1) {
+    if (this._status.value === 2) {
+      if (this._stopperStatus === 1) {
         this._stopperConnection?.send('stop');
-      } else if (this._stopperStatus == 0) {
+      } else if (this._stopperStatus === 0) {
         this.makeStopper();
         this._stopperConnection?.send('stop');
       }
@@ -225,13 +226,8 @@ export class userClass {
    * @public
    */
   public checkServer = () => {
-    if ( this._status.value > 0) {
-      console.log("サーバーの状態をテェック中");
-      this._runConnection?.send('checkServer');
-    } else {
-      console.log("コネクションが確立していません。");
-      console.log(this._status.value);
-    }
+    if ( this._status.value > 0) this._runConnection?.send('checkServer');
+    else {/*do something*/}
   }
 
   /**
@@ -240,12 +236,8 @@ export class userClass {
    * @public
    */
   public beHost = (): void => {
-    if ( (this._status.value == 1 || this._status.value == 3) && !this._hostExists.value) {// 1:connected, 3:guest
-      this._runConnection?.send('beHost');
-    } else {
-      console.log("コネクションが確立していません。");
-      console.log(this._status.value);
-    }
+    if ( (this._status.value === 1 || this._status.value === 3) && !this._hostExists.value) this._runConnection?.send('beHost');
+    else {/*do something*/}
   }
 
   /**
@@ -254,17 +246,9 @@ export class userClass {
    * @public
    */
   public beGuest = (): void => {
-    if (this._status.value == 1) {// 1:connected
-      this._runConnection?.send('beGuest');
-    } else if (this._status.value == 2) {// 2:host
-      this._runConnection?.send('resignHost');
-      // this._runConnection?.send('beGuest');
-      // setTimeout(() => this._runConnection?.send('beGuest'),1000);
-
-    } else {
-      console.log("コネクションが確立していません。");
-      console.log(this._status.value);
-    }
+    if (this._status.value === 1) this._runConnection?.send('beGuest');
+    else if (this._status.value === 2) this._runConnection?.send('resignHost');
+    else {/*do something*/}
   }
 
   /**
@@ -308,8 +292,6 @@ export class userClass {
    * @private
    */
   private stopperDisconnect = () => {
-    if (this._stopperConnection != undefined) {
-      this._stopperConnection.close();
-    }
+    if (this._stopperConnection != undefined) this._stopperConnection.close();
   }
 }
