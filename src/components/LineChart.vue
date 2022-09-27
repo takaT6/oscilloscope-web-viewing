@@ -17,6 +17,7 @@ var config = {
   // Making a Responsive Chart
   responsive: true
 };
+
 console.log(props.plotlyData[0])
 onMounted(()=> {
   Plotly.newPlot(
@@ -41,10 +42,10 @@ let intervalId = 0;
 const updateData = () => {
   clearInterval(intervalId);
   intervalId = setInterval(()=> {
-    let rowData = [...props.plotlyData]
+    let rowData = props.plotlyData
     let newData = {
-      x: [rowData[0]],
-      y: [rowData[1]]
+      x: rowData[0],
+      y: rowData[1]
     }
     let lastTimeStamp = rowData[0].slice(-1)[0];
     let minuteView = {
