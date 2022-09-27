@@ -1,4 +1,4 @@
-# oscilloscope-viewing
+# oscilloscope-web-viewing
 Demo => https://heretics-of-nagasaki.com/osc
 ## Project setup
 ```
