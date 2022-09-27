@@ -30,7 +30,7 @@ export class userClass {
   // Datasets for LineChart.
   private _plotlyData: number[][];
 
-  public isDataUpdated = ref(false);
+  public isDataUpdated = ref({1:0});
 
   /**
    * Constructor.
@@ -113,7 +113,7 @@ export class userClass {
               [...this._plotlyData[1], jsonData.value]
             ]
 
-            this.isDataUpdated.value = true;
+            this.isDataUpdated.value = {1:1};
 
             break;
           }

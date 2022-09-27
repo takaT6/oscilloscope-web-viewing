@@ -3,15 +3,15 @@
     <div class="controller">
       <button
         class="btn" id="connect"
-        @click="user.connect"
-        :disabled="user.status >= 1"
+        @click="connectWss"
+        :disabled="getStatus() >= 1"
       >
         Connect
       </button>
       <button
-        class="btn" id="disconnect"
-        @click="user.disconnect"
-        :disabled="user.status == 0 || user.isProcess"
+        class="btn" id="disconnectWss"
+        @click="disconnectWss"
+        :disabled="getStatus() == 0 || getIsProcess()"
         >
           Disconnect
       </button>
@@ -21,15 +21,15 @@
     <div class="controller">
       <button
         class="btn" id="behost"
-        @click="user.beHost"
-        :disabled="user.hostExists || user.status == 0 || user.isProcess"
+        @click="beHost"
+        :disabled="getHostExists() || getStatus() == 0 || getIsProcess()"
       >
         Host
       </button>
       <button
         class="btn" id="beguest"
-        @click="user.beGuest"
-        :disabled="user.status == 0 || user.status == 3 || user.isProcess"
+        @click="beGuest"
+        :disabled="getStatus() == 0 || getStatus() == 3 || getIsProcess()"
       >
         Guest
       </button>
@@ -39,15 +39,15 @@
     <div class="controller">
       <button
         class="btn" id="run"
-        @click="user.run(); updateData()"
-        :disabled="user.status != 2 || user.isProcess"
+        @click="runMeasurement"
+        :disabled="getStatus() != 2 || getIsProcess()"
       >
         run
       </button>
       <button
         class="btn" id="stop"
-        @click="user.stop"
-        :disabled="user.status != 2 || !user.isProcess"
+        @click="stopMeasurement"
+        :disabled="getStatus() != 2 || !getIsProcess()"
       >
         stop
       </button>
@@ -56,20 +56,10 @@
 </template>
 
 <script setup lang="ts">
-import { userClass } from "./common"
-import { watch } from "vue";
+import { useOscContorllerStore } from "@/store/store";
 
-const user = new userClass();
-
-const props = defineProps<{
-  plotlyData: number[][]
-}>();
-
-const emit = defineEmits(['update:plotlyData']);
-
-watch(user.isDataUpdated, () => {
-  emit('update:plotlyData', user.plotlyData);
-});
+const { getHostExists, getStatus, getIsProcess, getPlotlyData, 
+    connectWss, disconnectWss, runMeasurement, stopMeasurement, beHost, beGuest} = useOscContorllerStore();
 
 </script>
 

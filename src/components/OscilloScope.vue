@@ -2,14 +2,10 @@
   <div id="connection-controller1"/>
   <div id="connection-controller2"/>
   <div class="chart">
-    <LineChart
-      v-model:plotlyData="plotlyData"
-    />
+    <LineChart/>
   </div>
   <div id="connection-controller3"/>
-  <WSController
-      v-model:plotlyData="plotlyData"
-  />
+  <WSController/>
 </template>
 
 <script setup lang="ts">
@@ -21,7 +17,7 @@ const WSController = defineAsyncComponent(
   () => import("./WSController.vue")
 );
 
-var plotlyData: Ref<number[][]> = ref([[1,2,3],[2,3,4]]);
+// var plotlyData: Ref<number[][]> = ref([[1,2,3],[2,3,4]]);
 
 </script>
 
