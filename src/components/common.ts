@@ -45,11 +45,11 @@ export class userClass {
 
   public count = 0;
   private resetChartData = () => {
-    // this._plotlyData = [
-    //   [...new Array(5000)].map((_, i) => 0),
-    //   [...new Array(5000)].map((_, i) => 0)
-    // ];
-    this._plotlyData = [[],[]];
+    this._plotlyData = [
+      [...new Array(5000)].map((_, i) => 0),
+      [...new Array(5000)].map((_, i) => 0)
+    ];
+    // this._plotlyData = [[],[]];
     this.count = 0;
   }
 
@@ -105,8 +105,8 @@ export class userClass {
         switch (jsonData.type) {
           case "data": {
 
-            // this._plotlyData[0].shift();
-            // this._plotlyData[1].shift();
+            this._plotlyData[0].shift();
+            this._plotlyData[1].shift();
 
             this._plotlyData = [
               [...this._plotlyData[0], jsonData.timestamp],
@@ -192,10 +192,10 @@ export class userClass {
 
       this._runConnection?.send('run');
 
-      setTimeout( () => {
-        console.log("stop")
-        this.stop()
-      },10000)
+      // setTimeout( () => {
+      //   console.log("stop")
+      //   this.stop()
+      // },10000)
 
     } else {
       console.log("コネクションが確立していません。");

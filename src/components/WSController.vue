@@ -60,11 +60,26 @@ import { userClass } from "./common"
 import Plotly from 'plotly.js-dist-min'
 import { onMounted, watch } from "vue";
 
+var config = {
+  // Hide the Plotly Logo on the Modebar
+  displaylogo: false,
+  // Making a Responsive Chart
+  responsive: true
+};
+
 onMounted(()=> {
-  Plotly.newPlot("graph",[{ 
-    // x: [],
-    // y: [1,2,3]
-  }])
+  Plotly.newPlot(
+    "graph",
+    [{ 
+      x: [],
+      y: [],
+      mode: "lines",
+    }],
+    {
+      showlegend: false
+    },
+    config
+  );
 });
 
 var layout_update = {
@@ -87,7 +102,8 @@ const updateData = () => {
       }
     };
 
-    Plotly.update('graph', newData, minuteView);
+    Plotly.update('graph', newData, layout_update);
+    // Plotly.prependTraces('graph', newData, [0])
     // Plotly.relayout('graph', minuteView as Partial<Plotly.Layout>);
   },100);
   // requestAnimationFrame(updateData);
