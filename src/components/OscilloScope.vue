@@ -17,8 +17,6 @@ const WSController = defineAsyncComponent(
   () => import("./WSController.vue")
 );
 
-// var plotlyData: Ref<number[][]> = ref([[1,2,3],[2,3,4]]);
-
 </script>
 
 <style scoped lang="scss">
