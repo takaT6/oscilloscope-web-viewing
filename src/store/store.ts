@@ -1,13 +1,9 @@
-export const Const = {
-  WS_ADDRESS: "ws://localhost:8088/echo",
-  // WS_ADDRESS: "ws://192.168.11.2:8088/echo",
-}
-
 /**
  * UserClass
  */
 import { ref, Ref } from 'vue';
 import { defineStore } from "pinia";
+import { Const, PlotlyData } from '@/components/common';
 export const useOscContorllerStore = defineStore('oscContorller', () => {
 
   // WebSocket Instance for publishing connection and running measurement.
@@ -29,15 +25,23 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
   const isProcess: Ref<boolean> = ref<boolean>(false);
 
   // Datasets for LineChart.
-  let plotlyData: number[][] = [[],[]];
+  // let plotlyData: number[][] = [[1,2,3],[4,5,6]];
+  let plotlyData: PlotlyData = {
+    x: [1,2,3],
+    y: [4,5,6]
+  };
 
   let count = 0;
 
   const resetChartData = () => {
-    plotlyData = [
-      [...new Array(5000)].map((_, i) => 0),
-      [...new Array(5000)].map((_, i) => 0)
-    ];
+    // plotlyData = [
+    //   [...new Array(5000)].map((_, i) => 0),
+    //   [...new Array(5000)].map((_, i) => 0)
+    // ];
+    plotlyData = {
+      x: [...new Array(5000)].map((_, i) => 0),
+      y: [...new Array(5000)].map((_, i) => 0)
+    };
     // plotlyData = [[],[]];
     count = 0;
   }
@@ -52,7 +56,9 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
   const getIsProcess = (): boolean => isProcess.value;
 
   // getter
-  const getPlotlyData = (): number[][] => plotlyData;
+  // const getPlotlyData = (): number[][] => plotlyData;
+  
+  const getPlotlyData = (): PlotlyData => plotlyData;
 
   /**
    * Connect with WebSocket server.
@@ -84,13 +90,15 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
         switch (jsonData.type) {
           case "data": {
 
-            plotlyData[0].shift();
-            plotlyData[1].shift();
+            plotlyData.x.shift();
+            plotlyData.y.shift();
 
-            plotlyData = [
-              [...plotlyData[0], jsonData.timestamp],
-              [...plotlyData[1], jsonData.value]
-            ]
+            // plotlyData = {
+            //   x: [...plotlyData.x, jsonData.timestamp],
+            //   y: [...plotlyData.y, jsonData.value]
+            // }
+            plotlyData.x.push(jsonData.timestamp);
+            plotlyData.y.push(jsonData.value);
 
             break;
           }

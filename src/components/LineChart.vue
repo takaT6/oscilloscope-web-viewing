@@ -1,10 +1,11 @@
 <template>
-  <div id="graph"></div>
+  <div :id="Const.GRAPH_ID"></div>
 </template>
 
 <script setup lang="ts" >
 
 import Plotly from 'plotly.js-dist-min'
+import { Const } from '@/components/common'
 import { onMounted } from "vue";
 import { useOscContorllerStore } from "@/store/store";
 
@@ -17,16 +18,15 @@ var config = {
   responsive: true
 };
 
-console.log(getPlotlyData()[0])
-
 onMounted(()=> {
   let plotlyData = getPlotlyData();
   Plotly.newPlot(
-    "graph",
+    Const.GRAPH_ID,
     [{ 
-      x: plotlyData[0],
-      y: plotlyData[1],
-      // mode: "lines",
+      type: "scattergl",
+      x: plotlyData.x,
+      y: plotlyData.y,
+      mode: "lines",
     }],
     {
       showlegend: false
@@ -46,8 +46,8 @@ const updateData = () => {
   intervalId = setInterval(()=> {
     let plotlyData = getPlotlyData();
     let newData = {
-      x: [plotlyData[0]],
-      y: [plotlyData[1]]
+      x: [plotlyData.x],
+      y: [plotlyData.y]
     }
     // let lastTimeStamp = plotlyData[0].slice(-1)[0];
     // let minuteView = {
