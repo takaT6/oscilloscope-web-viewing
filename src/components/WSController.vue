@@ -58,8 +58,10 @@
 <script setup lang="ts">
 import { useOscContorllerStore } from "@/store/store";
 
-const { getHostExists, getStatus, getIsProcess, getPlotlyData, 
-    connectWss, disconnectWss, runMeasurement, stopMeasurement, beHost, beGuest} = useOscContorllerStore();
+const { getHostExists, getStatus, getIsProcess, 
+  connectWss, disconnectWss, runMeasurement, 
+  stopMeasurement, beHost, beGuest 
+} = useOscContorllerStore();
 
 </script>
 

@@ -30,7 +30,6 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
 
   // Datasets for LineChart.
   let plotlyData: number[][] = [[],[]];
-  const refPlotlyData: Ref<number[][]> = ref<number[][]>([[1,2,3],[2,3,4]]);
 
   let count = 0;
 
@@ -92,8 +91,6 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
               [...plotlyData[0], jsonData.timestamp],
               [...plotlyData[1], jsonData.value]
             ]
-
-            // refPlotlyData.value = plotlyData;
 
             break;
           }
