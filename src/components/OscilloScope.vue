@@ -6,10 +6,12 @@
   </div>
   <div id="connection-controller3"/>
   <WSController/>
+  <SlidersView/>
 </template>
 
 <script setup lang="ts">
 import LineChart from './LineChart.vue'
+import SlidersView from './SlidersView.vue'
 import { defineAsyncComponent} from "vue"
 
 // Lazy loading

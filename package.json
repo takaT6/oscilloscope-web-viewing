@@ -12,7 +12,8 @@
     "plotly.js-dist-min": "^2.14.0",
     "vue": "^3.2.13",
     "vue-class-component": "^8.0.0-0",
-    "vue-router": "^4.0.3"
+    "vue-router": "^4.0.3",
+    "vue-slider-component": "^3.2.20"
   },
   "devDependencies": {
     "@types/plotly.js": "^2.12.4",
