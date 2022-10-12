@@ -6,7 +6,15 @@
   </div>
   <div id="connection-controller3"/>
   <WSController/>
-  <SlidersView/>
+  <br>
+  <div id="chart-info">
+    <div class="text-left">
+      <SlidersView/>
+      <div>Max= <span id="max-val"></span> V</div>
+      <div>Min= <span id="min-val"></span> V</div>
+      <div>Freq= <span id="freq-val"></span> S/s</div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -22,5 +30,13 @@ const WSController = defineAsyncComponent(
 </script>
 
 <style scoped lang="scss">
-
+#chart-info {
+	margin: 16px auto;
+	text-align: center;
+	display: block;
+}
+.text-left {
+  text-align: left;
+	display: inline-block;
+}
 </style>

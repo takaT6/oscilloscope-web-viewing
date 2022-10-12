@@ -4,6 +4,7 @@
 import { ref, Ref } from 'vue';
 import { defineStore } from "pinia";
 import { Const, PlotlyData } from '@/components/common';
+import Plotly from 'plotly.js-dist-min';
 export const useOscContorllerStore = defineStore('oscContorller', () => {
 
   // WebSocket Instance for publishing connection and running measurement.
@@ -26,9 +27,14 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
 
   // Datasets for LineChart.
   // let plotlyData: number[][] = [[1,2,3],[4,5,6]];
+  // let plotlyData: PlotlyData = {
+  //   x: [1,2,3],
+  //   y: [4,5,6]
+  // };
+  
   let plotlyData: PlotlyData = {
-    x: [1,2,3],
-    y: [4,5,6]
+    x: [],
+    y: []
   };
 
   let count = 0;
@@ -42,6 +48,7 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
       x: [...new Array(5000)].map((_, i) => 0),
       y: [...new Array(5000)].map((_, i) => 0)
     };
+    
     // plotlyData = [[],[]];
     count = 0;
   }
@@ -89,7 +96,11 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
         count++;
         switch (jsonData.type) {
           case "data": {
-
+            // const newData = [{
+            //   x:[[jsonData.timestamp]],
+            //   y:[[jsonData.value]]
+            // }]
+            // Plotly.react('graph', newData)
             plotlyData.x.shift();
             plotlyData.y.shift();
 
@@ -179,10 +190,10 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
 
       runConnection.send('run');
 
-      setTimeout( () => {
-        console.log("stop")
-        stopMeasurement()
-      },3000)
+      // setTimeout( () => {
+      //   console.log("stop")
+      //   stopMeasurement()
+      // },3000)
 
     }else {/*do something*/}
   }

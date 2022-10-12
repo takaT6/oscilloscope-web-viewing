@@ -1,10 +1,11 @@
 <template>
   <div>
     <div class="box">
+      <span>Offset= </span>
       <input v-model="value" @input="clearErrorMsg" />
       <span style="color: red; margin-left: 20px;">{{ errorMsg }}</span>
     </div>
-    <VueSlider
+    <!-- <vue-slider
       v-model="value"
       :min="min"
       :max="max"
@@ -12,7 +13,7 @@
       :marks="[100, 1000]"
       @error="error"
       @change="clearErrorMsg"
-    ></VueSlider>
+    ></vue-slider> -->
   </div>
 </template>
 
@@ -27,21 +28,21 @@ const ERROR_TYPE = {
   MAX: 4,
   ORDER: 5,
 }
-var value = ref(100)
-var min = ref(100)
-var max = ref(1000)
-var errorMsg = ref('')
+let value = ref(100)
+let min = ref(100)
+let max = ref(1000)
+let errorMsg = ref('')
 
-const error = (type: any, msg: any) => {
-  switch (type) {
-    case ERROR_TYPE.MIN:
-      break
-    case ERROR_TYPE.MAX:
-      break
-    case ERROR_TYPE.VALUE:
-      break
-  }
-  errorMsg.value = msg
+const error = () => {
+  // switch (type) {
+  //   case ERROR_TYPE.MIN:
+  //     break
+  //   case ERROR_TYPE.MAX:
+  //     break
+  //   case ERROR_TYPE.VALUE:
+  //     break
+  // }
+  errorMsg.value = "msg"
 }
 const clearErrorMsg = () => {
   errorMsg.value = ''
