@@ -3,7 +3,7 @@
 
 2022/10/01 描画ライブラリを「μPlot」から「Plotly.js」に移行
 
-2022/09/15 描画ライブラリを「Chart.js」から「Plotly.js」に移行
+2022/09/15 描画ライブラリを「Chart.js」から「μPlot」に移行
 
 ### oscilloscope-web-viewing
 
