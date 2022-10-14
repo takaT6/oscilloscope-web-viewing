@@ -1,4 +1,11 @@
-# oscilloscope-web-viewing
+### 進捗状況
+2022/10/12 描画ライブラリをPlotly.jsからWebgl-plotに移行途中
+2022/10/01 描画ライブラリをμPlotからPlotly.jsに移行
+2022/09/15 描画ライブラリをChart.jsからPlotly.jsに移行
+
+### oscilloscope-web-viewing
+
+
 Demo => https://heretics-of-nagasaki.com/osc
 ## Project setup
 ```
