@@ -44,12 +44,12 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
     //   [...new Array(5000)].map((_, i) => 0),
     //   [...new Array(5000)].map((_, i) => 0)
     // ];
-    plotData = {
-      x: [...new Array(5000)].map((_, i) => 0),
-      y: [...new Array(5000)].map((_, i) => 0)
-    };
+    // plotData = {
+    //   x: [...new Array(5000)].map((_, i) => 0),
+    //   y: [...new Array(5000)].map((_, i) => 0)
+    // };
     
-    // plotData = [[],[]];
+    plotData = {x:[],y:[]};
     count = 0;
   }
 
@@ -65,7 +65,12 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
   // getter
   // const getPlotlyData = (): number[][] => plotData;
   
-  const getPlotlyData = (): PlotData => plotData;
+  const getPlotlyData = (): PlotData => {
+    const copyPlotData = plotData;
+    resetChartData();
+    return copyPlotData;
+    // return plotData
+  }
 
   /**
    * Connect with WebSocket server.
@@ -101,8 +106,8 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
             //   y:[[jsonData.value]]
             // }]
             // Plotly.react('graph', newData)
-            plotData.x.shift();
-            plotData.y.shift();
+            // plotData.x.shift();
+            // plotData.y.shift();
 
             // plotData = {
             //   x: [...plotData.x, jsonData.timestamp],

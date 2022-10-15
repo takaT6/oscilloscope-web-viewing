@@ -21,35 +21,30 @@ onMounted(()=> {
   const line = new WebglLine(color, numX);
   const wglp = new WebglPlot(canvas);
 
-  line.arrangeX();
+  // line.arrangeX();
+  line.lineSpaceX(-1, 1 / numX);
+  // line.scaleY(2)
+
+  // wglp.gScaleX = 0.4
+  // wglp.gScaleY = 0.1
+  // wglp.gXYratio = 10
   wglp.addLine(line);
-  var cnt = 0;
+  // var cnt = 0;
+  // for (let j = 0, len = 1; j < len; j++) {
+  //   for (let i = 0, len = 2500; i < len; i++) {
+    // line.setY(i,0);
+  //   }
+  // }
+  wglp.update();
+  console.log("finish init plot")
+
   const update = (): void => {
-    const freq = 0.001;
-    const amp = 0.5;
-    const noise = 0.1;
-    if (cnt > line.numPoints){
-      line.shiftAdd(new Float32Array([Math.PI * Math.random()*10 * freq * Math.PI * 2]));
-    } else {
-      for (let i = 0, len = line.numPoints; i < len; i++) {
-        const ySin = Math.sin(Math.PI * i * freq * Math.PI * 2);
-        const yNoise = Math.random() - 0.5;
-        line.setY(i, ySin * amp + yNoise * noise);
-      }
-    }
-    // cnt++;
+    let plotlyData = getPlotlyData();
+    line.shiftAdd(new Float32Array(plotlyData.y));
   }
-  var intervalId = 0
-  const intervalUpdate = () => {
-    clearInterval(intervalId);
-    intervalId = setInterval(()=>{
-      update()
-    },5)
-  }
-  intervalUpdate();
 
   const newFrame = (): void => {
-    // update();
+    update();
     wglp.update();
     window.requestAnimationFrame(newFrame);
   }
@@ -62,5 +57,6 @@ onMounted(()=> {
 <style scoped lang="scss">
 #my_canvas {
   width: 80vw;
+  height: 40vh;
 }
 </style>
