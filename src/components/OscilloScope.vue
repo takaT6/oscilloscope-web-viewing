@@ -15,15 +15,16 @@
       <div>Freq= <span id="freq-val"></span> S/s</div>
     </div>
   </div>
-  <div class="chart">
-    <LineChart2/>
-  </div>
   <!-- <div class="chart">
-    <LineChart3/>
+    <LineChart2/>
   </div> -->
+  <div class="chart">
+    <LineChart3/>
+  </div>
 </template>
 
 <script setup lang="ts">
+// import autoanimate
 import LineChart from './LineChart.vue'
 import LineChart2 from './LineChart2.vue'
 import LineChart3 from './LineChart3.vue'

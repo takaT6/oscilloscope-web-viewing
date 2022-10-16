@@ -22,7 +22,7 @@ onMounted(()=> {
   const wglp = new WebglPlot(canvas);
 
   // line.arrangeX();
-  line.lineSpaceX(-1, 1 / numX);
+  line.lineSpaceX(-1, 2 / (numX*1));
   // line.scaleY(2)
 
   // wglp.gScaleX = 0.4

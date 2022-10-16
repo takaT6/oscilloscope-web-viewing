@@ -44,12 +44,14 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
     //   [...new Array(5000)].map((_, i) => 0),
     //   [...new Array(5000)].map((_, i) => 0)
     // ];
-    // plotData = {
-    //   x: [...new Array(5000)].map((_, i) => 0),
-    //   y: [...new Array(5000)].map((_, i) => 0)
-    // };
+
+    plotData = {
+      x: [...new Array(10000)].map((_, i) => 0),
+      y: [...new Array(10000)].map((_, i) => 0)
+    };
     
-    plotData = {x:[],y:[]};
+    // plotData = {x:[],y:[]};
+
     count = 0;
   }
 
@@ -67,7 +69,7 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
   
   const getPlotlyData = (): PlotData => {
     const copyPlotData = plotData;
-    resetChartData();
+    // resetChartData();
     return copyPlotData;
     // return plotData
   }
@@ -106,8 +108,8 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
             //   y:[[jsonData.value]]
             // }]
             // Plotly.react('graph', newData)
-            // plotData.x.shift();
-            // plotData.y.shift();
+            plotData.x.shift();
+            plotData.y.shift();
 
             // plotData = {
             //   x: [...plotData.x, jsonData.timestamp],
@@ -195,10 +197,10 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
 
       runConnection.send('run');
 
-      // setTimeout( () => {
-      //   console.log("stop")
-      //   stopMeasurement()
-      // },3000)
+      setTimeout( () => {
+        console.log("stop")
+        stopMeasurement()
+      },3000)
 
     }else {/*do something*/}
   }
@@ -291,6 +293,7 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
     runMeasurement,
     stopMeasurement,
     beHost,
-    beGuest
+    beGuest,
+    isProcess,
   }
 })
