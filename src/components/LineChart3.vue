@@ -1,5 +1,5 @@
 <template>
-  <div :id="Const.GRAPH_ID" style="width: 80vw;height: 40vh;"></div>
+  <div :id="Const.GRAPH_ID"></div>
 </template>
 
 <script setup lang="ts" >
@@ -8,7 +8,6 @@ import * as echarts from 'echarts';
 import { onMounted } from "vue";
 import { Const } from '@/components/common'
 import { useOscContorllerStore } from "@/store/store";
-
 const { getPlotlyData, isProcess } = useOscContorllerStore();
 
 type EChartsOption = echarts.EChartsOption
@@ -24,7 +23,6 @@ const option: EChartsOption = {
   },
   animation: false,
   xAxis: {
-    // type: 'category',
     data: [],
     axisLabel: {
       formatter: (d: any) => Number(d).toFixed(2),
@@ -33,7 +31,6 @@ const option: EChartsOption = {
     }
   },
   yAxis: {
-    // type: 'value',
     name: "mV",
     nameLocation: "middle"
   },
@@ -42,32 +39,23 @@ const option: EChartsOption = {
     type: 'line',
     showSymbol: false,
     symbol: 'none',
-    // blendMode: 'lighter',
-    // symbolSize: 2,
-    // itemStyle: {
-    //   opacity:0.1
-    // }
-    // sampling: 'min',
-  }]
+    color: '#00FF00'
+  }],
+  backgroundColor: '#000000'
 };
 
 onMounted(()=> {
-  const chartDom = document.getElementById(Const.GRAPH_ID)!;
+  const chartDom = document.getElementById(Const.GRAPH_ID) as HTMLCanvasElement;
   const myChart = echarts.init(chartDom,undefined, {useDirtyRect:true, devicePixelRatio:1});
   myChart.setOption(option)
   const newFrame = () => {
     let plotlyData = getPlotlyData();
     myChart.setOption({
-      xAxis: {
-        data: plotlyData.x
-      },
-      series:{
-        data: plotlyData.y
-      }
+      xAxis: { data: plotlyData.x },
+      series:{ data: plotlyData.y }
     });
     requestAnimationFrame(newFrame);
   }
-  // myChart.appendData
   requestAnimationFrame(newFrame);
 })
 

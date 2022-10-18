@@ -1,7 +1,7 @@
 <template>
   <div id="connection-controller1"/>
   <div id="connection-controller2"/>
-  <div class="chart">
+  <div class="chart-area">
     <!-- <LineChart/> -->
   </div>
   <div id="connection-controller3"/>
@@ -15,12 +15,15 @@
       <div>Freq= <span id="freq-val"></span> S/s</div>
     </div>
   </div>
-  <!-- <div class="chart">
+  <!-- <div class="chart-area">
     <LineChart2/>
   </div> -->
-  <div class="chart">
+  <div class="chart-area">
     <LineChart3/>
   </div>
+  <!-- <div class="chart-area">
+    <LineChart4/>
+  </div> -->
 </template>
 
 <script setup lang="ts">
@@ -28,6 +31,7 @@
 import LineChart from './LineChart.vue'
 import LineChart2 from './LineChart2.vue'
 import LineChart3 from './LineChart3.vue'
+import LineChart4 from './LineChart4.vue'
 import SlidersView from './SlidersView.vue'
 import { defineAsyncComponent} from "vue"
 
@@ -48,7 +52,8 @@ const WSController = defineAsyncComponent(
   text-align: left;
 	display: inline-block;
 }
-.chart {
-  width: 80vw;
+.chart-area {
+  background-color: black;
+  text-align: center;
 }
 </style>
