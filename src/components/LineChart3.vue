@@ -4,7 +4,6 @@
 
 <script setup lang="ts" >
 import * as echarts from 'echarts';
-// import 'echarts-gl';
 import { onMounted } from "vue";
 import { Const } from '@/components/common'
 import { useOscContorllerStore } from "@/store/store";

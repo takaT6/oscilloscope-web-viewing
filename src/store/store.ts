@@ -1,61 +1,55 @@
-/**
- * UserClass
- */
 import { ref, Ref } from 'vue';
 import { defineStore } from "pinia";
-import { Const, PlotData } from '@/components/common';
-import WSWorker from "../work/WSWorker";
+import { PlotData } from '@/components/common';
+import Worker from "worker-loader!@/work/worker.ts";
+
 export const useOscContorllerStore = defineStore('oscContorller', () => {
 
-  const worker = WSWorker;
-  worker.onmessage = (event: MessageEvent) => {
-    console.log(event.data);
-  };
+  const wsWorker = new Worker();
   
-  // WebSocket Instance for publishing connection and running measurement.
-  let runConnection: WebSocket;
+  const isConnect: Ref<boolean> = ref<boolean>(false);
 
-  // WebSocket Instance for stopping measurement.
-  let stopperConnection: WebSocket;
-
-  // 0: unconected, 1: connected
-  const status: Ref<number> = ref<number>(0);
-
-  // 0: unprocessing, 1: processing
   const isProcess: Ref<boolean> = ref<boolean>(false);
 
   // Datasets for LineChart.
-  // let plotData: number[][] = [[1,2,3],[4,5,6]];
-  // let plotData: PlotlyData = {
-  //   x: [1,2,3],
-  //   y: [4,5,6]
-  // };
-  
-  const plotData: PlotData = {
-    x: [],
-    y: []
-  };
+  let plotData: PlotData = { x: [], y: [] };
 
   // getter
-  const getStatus = (): number => status.value;
+  const getIsConnect = (): boolean => isConnect.value;
 
   //getter
   const getIsProcess = (): boolean => isProcess.value;
-
-  // getter
-  // const getPlotlyData = (): number[][] => plotData;
   
-  const getPlotlyData = (): PlotData => {
-    // const copyPlotData = plotData;
-    // resetChartData();
-    // return copyPlotData;
-    return plotData
+  //getter
+  const getPlotlyData = (): PlotData => plotData;
+
+  const wwPostMessage = (mssg: string): void => {
+    wsWorker.postMessage(mssg);
+    console.log('main:', mssg);
   }
 
+  wsWorker.onmessage = (event: MessageEvent) => {
+    switch (event.data.type) {
+      case 'plotData':
+        plotData = event.data.value;
+        break
+      case 'isConnect':
+        isConnect.value = event.data.value;
+        break;
+      case 'isProcess':
+        isProcess.value = event.data.value;
+        break;
+      case 'count': 
+        console.log(event.data.value);
+        break;
+    }
+  };
+
   return {
-    getStatus,
+    getIsConnect,
     getIsProcess,
     getPlotlyData,
+    wwPostMessage,
     isProcess,
   }
 })
