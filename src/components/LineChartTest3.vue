@@ -38,7 +38,7 @@ const option: EChartsOption = {
     type: 'line',
     showSymbol: false,
     symbol: 'none',
-    color: '#00FF00'
+    color: '#00FF00',
   }],
   backgroundColor: '#000000'
 };

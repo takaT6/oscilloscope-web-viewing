@@ -1,7 +1,7 @@
 import { ref, Ref } from 'vue';
 import { defineStore } from "pinia";
 import { PlotData } from '@/components/common';
-import Worker from "worker-loader?inline=fallback!@/work/worker.ts";
+import Worker from "worker-loader?inline=fallback!@/work/websoket-worker.ts";
 
 export const useOscContorllerStore = defineStore('oscContorller', () => {
 
