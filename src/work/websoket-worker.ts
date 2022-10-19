@@ -64,6 +64,7 @@ const resetChartData = () => {
 
 worker.onmessage = (event: MessageEvent) => {
   const mssg = event.data;
+  console.log('worker:', mssg);
   switch (mssg) {
     case 'connect':
       connectWss();

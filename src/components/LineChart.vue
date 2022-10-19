@@ -3,90 +3,79 @@
 </template>
 
 <script setup lang="ts" >
-
-import Plotly from 'plotly.js-dist-min'
+import * as echarts from 'echarts';
+import { onMounted, watch } from "vue";
 import { Const } from '@/components/common'
-import { onMounted } from "vue";
-import { useOscContorllerStore } from "@/store/store";
+import { useWsContorllerStore } from "@/store/store";
 
-const {getPlotlyData} = useOscContorllerStore();
+const { getPlotlyData, isProcess } = useWsContorllerStore();
 
-let config = {
-  // Hide the Plotly Logo on the Modebar
-  displaylogo: false,
-  // Making a Responsive Chart
-  responsive: true
+type EChartsOption = echarts.EChartsOption;
+
+const option: EChartsOption = {
+  title: { text: 'Dynamic Data' },
+  toolbox: {
+    show: true,
+    feature: {
+      dataView: { readOnly: false },
+      restore: {},
+      saveAsImage: {}
+    }
+  },
+  animation: false,
+  xAxis: {
+    data: [],
+    axisLabel: {
+      formatter: (d: any) => Number(d).toFixed(2),
+      interval: 1000,
+      align: 'center'
+    }
+  },
+  yAxis: {
+    name: "mV",
+    nameLocation: "middle"
+  },
+  series: [{
+    data: [],
+    type: 'line',
+    showSymbol: false,
+    symbol: 'none',
+    color: '#00FF00'
+  }],
+  backgroundColor: '#000000'
 };
+
+let chartDom = document.getElementById(Const.GRAPH_ID) as HTMLCanvasElement;
+
+let myChart: echarts.ECharts
+// let myChart: echarts.ECharts = echarts.init(chartDom, undefined, { useDirtyRect:true, devicePixelRatio:1 })
 
 onMounted(()=> {
-  let plotlyData = getPlotlyData();
-  Plotly.newPlot(
-    Const.GRAPH_ID,
-    [{ 
-      type: "scattergl",
-      x: plotlyData.x,
-      y: plotlyData.y,
-      mode: "lines",
-    }],
-    {
-      showlegend: false
-    },
-    config
-  );
-  updateData();
-  updateChartInfo();
+  chartDom ?? (chartDom = document.getElementById(Const.GRAPH_ID) as HTMLCanvasElement);
+  myChart = echarts.init(chartDom, undefined, { useDirtyRect:true, devicePixelRatio:1 });
+  myChart.setOption(option);
+  const newFrame = () => {
+    let plotlyData = getPlotlyData();
+    myChart.setOption({
+      xAxis: { data: plotlyData.x },
+      series:{ data: plotlyData.y }
+    });
+    requestAnimationFrame(newFrame);
+  };
+  requestAnimationFrame(newFrame);
 });
 
-let layout_update = {
-  title: 'hoge hoge title', // updates the title
-};
+// watch(('$window.width') => {
+//     chart.resize()
+//   }
+// })
 
-let intervalId = 0;
-const updateData = () => {
-  clearInterval(intervalId);
-  intervalId = setInterval(()=> {
-    let plotlyData = getPlotlyData();
-    let newData = {
-      x: [plotlyData.x],
-      y: [plotlyData.y]
-    }
-    let lastTimeStamp = newData.x[0].slice(-1)[0];
-    let minuteView = {
-      xaxis: {
-        range: [lastTimeStamp-2, lastTimeStamp]
-      }
-    };
-    Plotly.update('graph', newData, {});
-    // Plotly.prependTraces('graph', newData, [0])
-    // Plotly.relayout('graph', minuteView as Partial<Plotly.Layout>);
-  },100);
-  // requestAnimationFrame(updateData);
-}
-
-
-let intervalId2 = 0;
-const updateChartInfo = () => {
-  clearInterval(intervalId2);
-  intervalId2 = setInterval(()=> {
-    let plotlyData = getPlotlyData();
-    let maxElm = document.getElementById('max-val');
-    let minElm = document.getElementById('min-val');
-    let freqElm = document.getElementById('freq-val');
-    let max = Math.max(...plotlyData.y);
-    let min = Math.min(...plotlyData.y);
-    maxElm!.innerHTML = String(max);
-    minElm!.innerHTML = String(min);
-    const freq = () => {
-      let maxX = Math.max(...plotlyData.x);
-      let minX = Math.min(...plotlyData.x);
-      let timeRange = maxX-minX;
-      return plotlyData.x.length/timeRange
-    }
-    freqElm!.innerHTML = String(Math.floor(freq()))
-    freqElm!.innerHTML = String(Math.floor(1/(plotlyData.x[1]-plotlyData.x[0])));
-    // plotlyData.x.
-  },100)
-}
-// updateData();
-
+// myChart.resize()
 </script>
+
+<style scoped lang="scss">
+#graph {
+  width: 80vw;
+  height: 40vh;
+}
+</style>

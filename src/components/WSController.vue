@@ -38,9 +38,9 @@
 </template>
 
 <script setup lang="ts">
-import { useOscContorllerStore } from "@/store/store";
+import { useWsContorllerStore } from "@/store/store";
 
-const { getIsConnect, getIsProcess, wwPostMessage } = useOscContorllerStore();
+const { getIsConnect, getIsProcess, wwPostMessage } = useWsContorllerStore();
 
 </script>
 

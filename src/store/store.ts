@@ -1,11 +1,11 @@
 import { ref, Ref } from 'vue';
 import { defineStore } from "pinia";
 import { PlotData } from '@/components/common';
-import Worker from "worker-loader!@/work/worker.ts";
+import wsWorker from "worker-loader?inline=no-fallback!@/work/websoket-worker.ts";
 
-export const useOscContorllerStore = defineStore('oscContorller', () => {
+export const useWsContorllerStore = defineStore('wsContorller', () => {
 
-  const wsWorker = new Worker();
+  const wsworker = new wsWorker();
   
   const isConnect: Ref<boolean> = ref<boolean>(false);
 
@@ -24,11 +24,11 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
   const getPlotlyData = (): PlotData => plotData;
 
   const wwPostMessage = (mssg: string): void => {
-    wsWorker.postMessage(mssg);
+    wsworker.postMessage(mssg);
     console.log('main:', mssg);
   }
 
-  wsWorker.onmessage = (event: MessageEvent) => {
+  wsworker.onmessage = (event: MessageEvent) => {
     switch (event.data.type) {
       case 'plotData':
         plotData = event.data.value;

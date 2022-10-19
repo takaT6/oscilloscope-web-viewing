@@ -1,7 +1,7 @@
 <template>
   <div id="connection-controller1"/>
   <div class="chart-area">
-    <!-- <LineChart/> -->
+    <LineChart/>
   </div>
   <div id="connection-controller2"/>
   <WSController/>
@@ -14,23 +14,11 @@
       <div>Freq= <span id="freq-val"></span> S/s</div>
     </div>
   </div>
-  <!-- <div class="chart-area">
-    <LineChart2/>
-  </div> -->
-  <div class="chart-area">
-    <LineChart3/>
-  </div>
-  <!-- <div class="chart-area">
-    <LineChart4/>
-  </div> -->
 </template>
 
 <script setup lang="ts">
 // import autoanimate
 import LineChart from './LineChart.vue'
-import LineChart2 from './LineChart2.vue'
-import LineChart3 from './LineChart3.vue'
-import LineChart4 from './LineChart4.vue'
 import SlidersView from './SlidersView.vue'
 import { defineAsyncComponent} from "vue"
 
