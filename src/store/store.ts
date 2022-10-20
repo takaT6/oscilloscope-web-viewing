@@ -1,15 +1,15 @@
 import { ref, Ref } from 'vue';
 import { defineStore } from "pinia";
 import { PlotData } from '@/components/common';
-import Worker from "worker-loader?inline=fallback!@/work/websoket-worker.ts";
+import WebSocketWorker from "worker-loader?inline=fallback!@/work/websocket-worker.ts";
 
 export const useOscContorllerStore = defineStore('oscContorller', () => {
 
-  const wsWorker = new Worker();
+  const wsWorker = new WebSocketWorker();
   
-  const isConnect: Ref<boolean> = ref<boolean>(false);
+  const isConnect = ref(false);
 
-  const isProcess: Ref<boolean> = ref<boolean>(false);
+  const isProcess = ref(false);
 
   // Datasets for LineChart.
   let plotData: PlotData = { x: [], y: [] };
@@ -19,11 +19,13 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
 
   //getter
   const getIsProcess = (): boolean => isProcess.value;
+
+  const getIsProcessRf = (): Ref<boolean> => isProcess;
   
   //getter
   const getPlotlyData = (): PlotData => plotData;
 
-  const wwPostMessage = (mssg: string): void => {
+  const postMessage = (mssg: string): void => {
     wsWorker.postMessage(mssg);
     console.log('main:', mssg);
   }
@@ -49,7 +51,9 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
     getIsConnect,
     getIsProcess,
     getPlotlyData,
-    wwPostMessage,
+    postMessage,
     isProcess,
+    isConnect,
+    getIsProcessRf
   }
 })

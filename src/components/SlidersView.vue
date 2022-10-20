@@ -29,8 +29,8 @@ const ERROR_TYPE = {
   ORDER: 5,
 }
 let value = ref(100)
-let min = ref(100)
-let max = ref(1000)
+// let min = ref(100)
+// let max = ref(1000)
 let errorMsg = ref('')
 
 const error = () => {

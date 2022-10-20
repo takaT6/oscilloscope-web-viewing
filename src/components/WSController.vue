@@ -3,15 +3,15 @@
     <div class="controller">
       <button
         class="btn" id="connect"
-        @click="wwPostMessage('connect')"
-        :disabled="getIsConnect()"
+        @click="postMessage('connect')"
+        :disabled="isConnect"
       >
         Connect
       </button>
       <button
         class="btn" id="disconnect"
-        @click="wwPostMessage('disconnect')"
-        :disabled="!getIsConnect() || getIsProcess()"
+        @click="postMessage('disconnect')"
+        :disabled="!isConnect || isProcess"
       >
         Disconnect
       </button>
@@ -21,15 +21,15 @@
     <div class="controller">
       <button
         class="btn" id="run"
-        @click="wwPostMessage('run')"
-        :disabled="!getIsConnect() ||  getIsProcess()"
+        @click="postMessage('run')"
+        :disabled="!isConnect ||  isProcess"
       >
         run
       </button>
       <button
         class="btn" id="stop"
-        @click="wwPostMessage('stop')"
-        :disabled="!getIsConnect() || !getIsProcess()"
+        @click="postMessage('stop')"
+        :disabled="!isConnect || !isProcess"
       >
         stop
       </button>
@@ -38,9 +38,12 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
 import { useOscContorllerStore } from "@/store/store";
 
-const { getIsConnect, getIsProcess, wwPostMessage } = useOscContorllerStore();
+const store = useOscContorllerStore()
+const { postMessage } = store;
+const { isProcess, isConnect } = storeToRefs(store)
 
 </script>
 

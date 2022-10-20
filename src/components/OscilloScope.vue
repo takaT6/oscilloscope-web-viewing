@@ -1,14 +1,16 @@
 <template>
+  <WSController/>
   <div id="connection-controller1"/>
+  <br>
   <div class="chart-area">
     <LineChart/>
   </div>
+  <br>
   <div id="connection-controller2"/>
-  <WSController/>
   <br>
   <div id="chart-info">
     <div class="text-left">
-      <SlidersView/>
+      <!-- <SlidersView/> -->
       <div>Max= <span id="max-val"></span> V</div>
       <div>Min= <span id="min-val"></span> V</div>
       <div>Freq= <span id="freq-val"></span> S/s</div>

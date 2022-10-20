@@ -46,7 +46,7 @@ let plotData: PlotData = {
 
 let count = 0;
 
-const resetChartData = () => {
+const resetChartData = (): void => {
   // plotData = [
   //   [...new Array(5000)].map((_, i) => 0),
   //   [...new Array(5000)].map((_, i) => 0)
@@ -62,14 +62,14 @@ const resetChartData = () => {
   count = 0;
 }
 
-worker.onmessage = (event: MessageEvent) => {
+worker.onmessage = (event: MessageEvent): void => {
   const mssg = event.data;
   switch (mssg) {
     case 'connect':
       connectWss();
       break;
     case 'run':
-      runMeasurement();
+      event.data.timer ? runMeasurement(event.data.timer) : runMeasurement(3000);
       break;
     case 'stop':
       stopMeasurement();
@@ -80,7 +80,7 @@ worker.onmessage = (event: MessageEvent) => {
   }
 }
 
-const newFrame = () => {
+const newFrame = (): void => {
   // Send mssg to main thread.
   postMessage('plotData', plotData)
   if(isProcess.value()) requestAnimationFrame(newFrame);
@@ -98,16 +98,16 @@ const connectWss = (): boolean => {
   if(!stopperStatus) makeStopper();
 
   // Define WebSocket Open Event
-  runnerConnection.onopen = () => {
+  runnerConnection.onopen = (): void => {
     isConnect.change(true);
     checkServer();
   };
 
   // Define WebSocket Error Event
-  runnerConnection.onerror = () => {/* do nothing */};
+  runnerConnection.onerror = (): void => {/* do nothing */};
 
   // Define WebSocket Event for when catch messages
-  runnerConnection.onmessage = (event) => {
+  runnerConnection.onmessage = (event: MessageEvent): void => {
     const jsonData = JSON.parse(event.data);
     switch (jsonData.type) {
       case "data":
@@ -125,7 +125,7 @@ const connectWss = (): boolean => {
   };
 
   // Define WebSocket Close Event
-  runnerConnection.onclose = () => {
+  runnerConnection.onclose = (): void => {
     isConnect.change(false);
     if (isProcess.value()) stopMeasurement();
     stopperDisconnect();
@@ -145,15 +145,17 @@ const disconnectWss = (): void => {
  * Send "run" message to WS server.
  * WS server will run measurement and return "isProcess" .
  */
-const runMeasurement = (): void => {
+const runMeasurement = (timer?: number): void => {
   if (isConnect.value() && !isProcess.value()) {
     resetChartData();
 
     runnerConnection.send('run');
 
-    setTimeout( () => {
-      stopMeasurement()
-    },3000)
+    if(timer){
+      setTimeout( () => {
+        stopMeasurement();
+      },timer)
+    }
 
   }else {/*do something*/}
 }
@@ -206,6 +208,6 @@ const makeStopper = (): boolean => {
 /**
  * Disconnect Stpper Connection from WebSocket server.
  */
-const stopperDisconnect = () => {
+const stopperDisconnect = (): void => {
   if (stopperConnection != undefined) stopperConnection.close();
 }
