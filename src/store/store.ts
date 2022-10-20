@@ -2,9 +2,10 @@ import { ref, Ref } from 'vue';
 import { defineStore } from "pinia";
 import { PlotData } from '@/components/common';
 import WebSocketWorker from "worker-loader?inline=fallback!@/work/websocket-worker.ts";
+import * as echarts from 'echarts';
 
 export const useOscContorllerStore = defineStore('oscContorller', () => {
-
+  // WebWorker  Instance
   const wsWorker = new WebSocketWorker();
   
   const isConnect = ref(false);
@@ -19,8 +20,6 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
 
   //getter
   const getIsProcess = (): boolean => isProcess.value;
-
-  const getIsProcessRf = (): Ref<boolean> => isProcess;
   
   //getter
   const getPlotlyData = (): PlotData => plotData;
@@ -30,7 +29,7 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
     console.log('main:', mssg);
   }
 
-  wsWorker.onmessage = (event: MessageEvent) => {
+  wsWorker.onmessage = (event: MessageEvent): void => {
     switch (event.data.type) {
       case 'plotData':
         plotData = event.data.value;
@@ -45,7 +44,7 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
         console.log(event.data.value);
         break;
     }
-  };
+  }
 
   return {
     getIsConnect,
@@ -54,6 +53,67 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
     postMessage,
     isProcess,
     isConnect,
-    getIsProcessRf
   }
-})
+});
+
+export const useChartOptionStore = defineStore('chartOption', () => {
+
+  const chartOption = ref<echarts.EChartsOption>({
+    title: { 
+      text: 'Web Osillo',
+      textStyle:{
+        color: '#ffffff'
+      }
+    },
+    tooltip: {
+      trigger: 'axis'
+    },
+    toolbox: {
+      show: true,
+      feature: {
+        dataView: { readOnly: false },
+        restore: {},
+        saveAsImage: {},
+      },
+      iconStyle: {
+        borderColor: '#ffffff'
+      },
+      showTitle: false
+    },
+    animation: false,
+    xAxis: {
+      data: [],
+      axisLabel: {
+        formatter: (d: any) => Number(d).toFixed(2),
+        interval: 1000,
+        align: 'center',
+        color: '#ffffff',
+        show: true
+      },
+    },
+    yAxis: {
+      name: "mV",
+      nameLocation: "middle",
+      axisLabel: {
+        color: '#ffffff'
+      },
+    },
+    series: [{
+      data: [],
+      type: 'line',
+      showSymbol: false,
+      symbol: 'none',
+      color: '#00FF00',
+    }],
+    backgroundColor: '#000000',
+  });
+
+  const showXaxis = (show: boolean) => {
+    // chartOption.value.xAxis.show = {show};
+  }
+
+  //getter
+  const getChartOption = () => chartOption.value;
+
+  return { chartOption, getChartOption }
+});

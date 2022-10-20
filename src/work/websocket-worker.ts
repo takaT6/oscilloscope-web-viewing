@@ -47,11 +47,6 @@ let plotData: PlotData = {
 let count = 0;
 
 const resetChartData = (): void => {
-  // plotData = [
-  //   [...new Array(5000)].map((_, i) => 0),
-  //   [...new Array(5000)].map((_, i) => 0)
-  // ];
-
   plotData = {
     x: [...new Array(10000)].map((_, i) => 0),
     y: [...new Array(10000)].map((_, i) => 0)
