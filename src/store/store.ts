@@ -1,7 +1,7 @@
-import { ref, Ref } from 'vue';
-import { defineStore } from "pinia";
+import { ref, reactive, toRefs } from 'vue';
+import { defineStore } from 'pinia';
 import { PlotData } from '@/components/common';
-import WebSocketWorker from "worker-loader?inline=fallback!@/work/websocket-worker.ts";
+import WebSocketWorker from 'worker-loader?inline=fallback!@/work/websocket-worker.ts';
 import * as echarts from 'echarts';
 
 export const useOscContorllerStore = defineStore('oscContorller', () => {
@@ -13,7 +13,11 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
   const isProcess = ref(false);
 
   // Datasets for LineChart.
-  let plotData: PlotData = { x: [], y: [] };
+  // let plotData: PlotData = { x: [], y: [] };
+  let plotData = {
+    x: [...new Array(10000)].map((_, i) => 0),
+    y: [...new Array(10000)].map((_, i) => 0)
+  };
 
   // getter
   const getIsConnect = (): boolean => isConnect.value;
@@ -57,8 +61,8 @@ export const useOscContorllerStore = defineStore('oscContorller', () => {
 });
 
 export const useChartOptionStore = defineStore('chartOption', () => {
-
-  const chartOption = ref<echarts.EChartsOption>({
+  type EChartsOption = echarts.EChartsOption
+  const chartOption = reactive({
     title: { 
       text: 'Web Osillo',
       textStyle:{
@@ -95,7 +99,8 @@ export const useChartOptionStore = defineStore('chartOption', () => {
       name: "mV",
       nameLocation: "middle",
       axisLabel: {
-        color: '#ffffff'
+        color: '#ffffff',
+        show: true
       },
     },
     series: [{
@@ -104,16 +109,29 @@ export const useChartOptionStore = defineStore('chartOption', () => {
       showSymbol: false,
       symbol: 'none',
       color: '#00FF00',
+      markLine: {
+        symbol: 'none',
+        data: [{name: '', yAxis: 0.301}],
+      }
     }],
     backgroundColor: '#000000',
   });
 
-  const showXaxis = (show: boolean) => {
-    // chartOption.value.xAxis.show = {show};
+  const showXaxis = (show: boolean): void => {
+    chartOption.xAxis.axisLabel.show = show;
+  }
+
+  const showYaxis = (show: boolean): void => {
+    chartOption.yAxis.axisLabel.show = show;
   }
 
   //getter
-  const getChartOption = () => chartOption.value;
+  const getChartOption = () => chartOption;
 
-  return { chartOption, getChartOption }
+  return { 
+    chartOption, 
+    getChartOption,
+    showXaxis,
+    showYaxis,
+  }
 });

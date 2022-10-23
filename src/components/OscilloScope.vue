@@ -3,26 +3,30 @@
   <div id="connection-controller1"/>
   <br>
   <div class="chart-area">
-    <LineChart/>
+    <!-- <LineChart/> -->
+  </div>
+  <div class="">
+    <LineChart4/>
   </div>
   <br>
   <div id="connection-controller2"/>
   <br>
   <div id="chart-info">
     <div class="text-left">
-      <!-- <SlidersView/> -->
       <div>Max= <span id="max-val"></span> V</div>
       <div>Min= <span id="min-val"></span> V</div>
       <div>Freq= <span id="freq-val"></span> S/s</div>
     </div>
   </div>
+  <ChartOptions/>
 </template>
 
 <script setup lang="ts">
 // import autoanimate
-import LineChart from './LineChart.vue'
-import SlidersView from './SlidersView.vue'
-import { defineAsyncComponent} from "vue"
+import LineChart from './LineChart.vue';
+import LineChart4 from './LineChartTest4.vue';
+import ChartOptions from './ChartOptions.vue'
+import { defineAsyncComponent} from 'vue';
 
 // Lazy loading
 const WSController = defineAsyncComponent(

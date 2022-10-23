@@ -2,16 +2,16 @@
   <teleport to="#connection-controller1">
     <div class="controller">
       <button
-        class="btn" id="connect"
+        :class="[isConnect ? Const.BTN_DISABLED : Const.BTN_ABLED]" 
+        id="connect"
         @click="postMessage('connect')"
-        :disabled="isConnect"
       >
         Connect
       </button>
       <button
-        class="btn" id="disconnect"
+        :class="[(!isConnect || isProcess) ? Const.BTN_DISABLED : Const.BTN_ABLED]" 
+        id="disconnect"
         @click="postMessage('disconnect')"
-        :disabled="!isConnect || isProcess"
       >
         Disconnect
       </button>
@@ -20,16 +20,16 @@
   <teleport to="#connection-controller2">
     <div class="controller">
       <button
-        class="btn" id="run"
+        :class="[(!isConnect ||  isProcess) ? Const.BTN_DISABLED : Const.BTN_ABLED]" 
+        id="run"
         @click="postMessage('run')"
-        :disabled="!isConnect ||  isProcess"
       >
         run
       </button>
       <button
-        class="btn" id="stop"
+      :class="[(!isConnect || !isProcess) ? Const.BTN_DISABLED : Const.BTN_ABLED]" 
+        id="stop"
         @click="postMessage('stop')"
-        :disabled="!isConnect || !isProcess"
       >
         stop
       </button>
@@ -40,6 +40,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useOscContorllerStore } from "@/store/store";
+import { Const } from '@/components/common';
 
 const store = useOscContorllerStore()
 const { postMessage } = store;

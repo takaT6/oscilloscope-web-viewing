@@ -146,11 +146,11 @@ const runMeasurement = (timer?: number): void => {
 
     runnerConnection.send('run');
 
-    if(timer){
-      setTimeout( () => {
-        stopMeasurement();
-      },timer)
-    }
+    // if(timer){
+    //   setTimeout( () => {
+    //     stopMeasurement();
+    //   },timer)
+    // }
 
   }else {/*do something*/}
 }
