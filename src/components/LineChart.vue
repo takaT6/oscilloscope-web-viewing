@@ -43,7 +43,7 @@ watch(isProcess, () => {
 });
 
 watch(chartOption, () => {
-  console.log("wath option");
+  // console.log("wath option");
   myChart?.setOption(getChartOption());
   newFrame();
 });

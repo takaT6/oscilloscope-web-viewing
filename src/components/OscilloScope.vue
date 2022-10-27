@@ -3,10 +3,10 @@
   <div id="connection-controller1"/>
   <br>
   <div class="chart-area">
-    <!-- <LineChart/> -->
+    <LineChart/>
   </div>
   <div class="">
-    <LineChart4/>
+    <!-- <LineChart4/> -->
   </div>
   <br>
   <div id="connection-controller2"/>

@@ -5,6 +5,8 @@ import WebSocketWorker from 'worker-loader?inline=fallback!@/work/websocket-work
 import * as echarts from 'echarts';
 
 export const useOscContorllerStore = defineStore('oscContorller', () => {
+
+  console.log('make WebWorker Thread.')
   // WebWorker  Instance
   const wsWorker = new WebSocketWorker();
   
@@ -103,17 +105,30 @@ export const useChartOptionStore = defineStore('chartOption', () => {
         show: true
       },
     },
-    series: [{
-      data: [],
-      type: 'line',
-      showSymbol: false,
-      symbol: 'none',
-      color: '#00FF00',
-      markLine: {
+    series: [
+      {
+        name: 'mV',
+        data: [],
+        type: 'line',
+        showSymbol: false,
         symbol: 'none',
-        data: [{name: '', yAxis: 0.301}],
+        color: '#00FF00'
+      },
+      {
+        name: 'markline',
+        type: 'line',
+        showSymbol: false,
+        symbol: 'none',
+        color: '#ff0000',
+        markLine: {
+          symbol: 'none',
+          data: [{
+                  name: '', 
+                  yAxis: 0.301,
+                }],
+        }
       }
-    }],
+    ],
     backgroundColor: '#000000',
   });
 
@@ -125,6 +140,14 @@ export const useChartOptionStore = defineStore('chartOption', () => {
     chartOption.yAxis.axisLabel.show = show;
   }
 
+  const markLineYvalue = (value: number): void => {
+    chartOption.series[1].markLine!.data[0].yAxis = value;
+  }
+
+  const markLineXvalue = (value: number): void => {
+    chartOption.series[1].markLine!.data[0].yAxis = value;
+  }
+
   //getter
   const getChartOption = () => chartOption;
 
@@ -133,5 +156,6 @@ export const useChartOptionStore = defineStore('chartOption', () => {
     getChartOption,
     showXaxis,
     showYaxis,
+    markLineYvalue
   }
 });
