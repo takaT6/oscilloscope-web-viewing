@@ -2,11 +2,17 @@
   <WSController/>
   <div id="connection-controller1"/>
   <br>
-  <div class="chart-area">
+  <!-- <div class="chart-area">
     <LineChart/>
-  </div>
-  <div class="">
-    <!-- <LineChart4/> -->
+  </div> -->
+  <!-- <div>
+    <LineChart4/>
+  </div> -->
+  <!-- <div>
+    <LineChart5/>
+  </div> -->
+  <div>
+    <LineChart6/>
   </div>
   <br>
   <div id="connection-controller2"/>
@@ -25,6 +31,8 @@
 // import autoanimate
 import LineChart from './LineChart.vue';
 import LineChart4 from './LineChartTest4.vue';
+import LineChart5 from './LineChartTest5.vue';
+import LineChart6 from './LineChartTest6.vue';
 import ChartOptions from './ChartOptions.vue'
 import { defineAsyncComponent} from 'vue';
 
